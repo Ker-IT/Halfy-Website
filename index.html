@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halfy - Retrouvez-vous à mi-chemin</title>
+    <meta name="description" content="L'application équitable pour vos rendez-vous. Calculez le point médian entre deux adresses et trouvez le lieu idéal pour vous rencontrer.">
+    
+    <!-- Favicon (Utilisez votre icone d'app ici) -->
+    <link rel="icon" href="favicon.ico">
+
+    <!-- Police Google (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #2563eb; /* Le bleu de votre app */
+            --dark: #111827;
+            --gray: #6b7280;
+            --light: #f3f4f6;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            background-color: var(--white);
+            line-height: 1.6;
+        }
+
+        /* --- HEADER --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .logo span { color: #ef4444; }
+
+        .btn-download {
+            background-color: var(--dark);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .btn-download:hover { transform: translateY(-2px); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(180deg, #fff 0%, #eff6ff 100%);
+        }
+
+        h1 {
+            font-size: 3rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            max-width: 800px;
+        }
+        
+        h1 span { color: var(--primary); }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        /* Google Play Button Styling */
+        .store-badge {
+            display: inline-block;
+            background: black;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: opacity 0.2s;
+        }
+        .store-badge:hover { opacity: 0.8; }
+        .store-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.2;
+        }
+        .store-text small { font-size: 10px; text-transform: uppercase; }
+        .store-text strong { font-size: 18px; font-weight: 600; }
+
+        /* Mockup Phone */
+        .mockup-container {
+            margin-top: 60px;
+            position: relative;
+        }
+        .phone-frame {
+            width: 300px;
+            height: 600px;
+            background: var(--dark);
+            border-radius: 40px;
+            padding: 10px;
+            box-shadow: 0 20px 50px -10px rgba(37, 99, 235, 0.3);
+            border: 8px solid #333;
+        }
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ccc;
+            font-size: 14px;
+        }
+        .phone-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- FEATURES --- */
+        .features {
+            padding: 80px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 20px;
+        }
+        .icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .feature-card h3 { margin-bottom: 10px; font-size: 1.25rem; }
+        .feature-card p { color: var(--gray); }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--dark);
+            color: var(--gray);
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        footer a { color: var(--white); text-decoration: none; margin: 0 10px; }
+        footer a:hover { text-decoration: underline; }
+        .legal { margin-top: 20px; font-size: 0.8rem; opacity: 0.6; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .hero { padding: 40px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <header>
+        <a href="#" class="logo">Halfy<span>.</span></a>
+        <a href="#download" class="btn-download">Télécharger</a>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Ne choisissez plus,<br>rencontrez-vous <span>à mi-chemin</span>.</h1>
+        <p class="subtitle">
+            Halfy calcule le point médian équitable entre deux adresses et vous propose les meilleurs bars, restaurants et parcs pour vous retrouver.
+        </p>
+
+        <!-- Google Play Button -->
+        <a href="VOTRE_LIEN_GOOGLE_PLAY_ICI" class="store-badge" id="download">
+            <!-- Icone Play Store SVG -->
+            <svg viewBox="0 0 24 24" width="30" height="30">
+                <path fill="#fff" d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.3,12.5L17.38,15.69L15.39,13.7L17.38,11.72L20.3,14.9C20.63,13.13 20.63,10.87 20.3,12.5M16.81,8.88L14.54,11.15L6.05,2.66L16.81,8.88Z" />
+            </svg>
+            <div class="store-text">
+                <small>DISPONIBLE SUR</small>
+                <strong>Google Play</strong>
+            </div>
+        </a>
+
+        <!-- Mockup Téléphone -->
+        <div class="mockup-container">
+            <div class="phone-frame">
+                <div class="phone-screen">
+                    <!-- REMPLACEZ src="" PAR VOTRE CAPTURE D'ECRAN -->
+                    <!-- <img src="screenshot.png" alt="Halfy App Screenshot"> -->
+                    <span>Insérez votre capture d'écran ici</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="feature-card">
+            <span class="icon">📍</span>
+            <h3>Équitable</h3>
+            <p>Fini les débats. L'algorithme trouve le point géographique exact entre vos deux positions.</p>
+        </div>
+        <div class="feature-card">
+            <span class="icon">🔍</span>
+            <h3>Découverte</h3>
+            <p>Explorez des cafés, bars et parcs sympas que vous ne connaissiez peut-être pas.</p>
+        </div>
+        <div class="feature-card">
+            <span class="icon">🔒</span>
+            <h3>Privé</h3>
+            <p>Aucune donnée de localisation n'est stockée. Tout se passe sur votre téléphone.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>Halfy est un produit de <strong>Kër IT</strong>.</p>
+        <div style="margin: 20px 0;">
+            <a href="mailto:contactus.kerit@gmail.com">Contact</a>
+            <!-- Le lien vers la politique de confidentialité est OBLIGATOIRE pour Google -->
+            <a href="privacy.html">Politique de Confidentialité</a>
+        </div>
+        <p class="legal">© 2025 Kër IT. Tous droits réservés.</p>
+    </footer>
+
+</body>
+</html>

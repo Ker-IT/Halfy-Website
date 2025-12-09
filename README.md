@@ -23,8 +23,8 @@ The project follows a simple directory structure to handle internationalization 
 /
 ├── assets/              # Images, icons, favicons, and global resources
 ├── fr/                  # 🇫🇷 French localized version
-│   ├── index.html       # French Homepage
-│   └── privacy.html     # French Privacy Policy
+│   ├── index.html       # 🇫🇷 French Homepage
+│   └── privacy.html     # 🇫🇷 French Privacy Policy
 ├── index.html           # 🇬🇧 English Homepage (Main Entry)
 ├── privacy.html         # 🇬🇧 English Privacy Policy
 └── README.md            # Project documentation

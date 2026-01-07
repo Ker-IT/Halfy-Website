@@ -1,5 +1,8 @@
 # Halfy - Official Landing Page
 
+![Project Status](https://img.shields.io/badge/status-live-success)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
 This repository hosts the source code for the official website of **Halfy**, a mobile application that calculates the fair geographical midpoint between two addresses to suggest meeting places.
 
 The website serves as a showcase for the app, provides download links, and hosts the legal documentation (Privacy Policy).

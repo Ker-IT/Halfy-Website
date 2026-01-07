@@ -4,7 +4,7 @@ This repository hosts the source code for the official website of **Halfy**, a m
 
 The website serves as a showcase for the app, provides download links, and hosts the legal documentation (Privacy Policy).
 
-🔗 **Live Website:** [https://ker-it.github.io/Halfy-Website/](https://ker-it.github.io/Halfy-Website/)
+🔗 **Live Website:** [https://halfy.app](https://halfy.app/)
 
 ## 🚀 Features
 
@@ -57,4 +57,4 @@ Halfy is a mobile application built with React Native and Expo. It helps users f
 ## 📄 License
 This project is proprietary to Kër IT.
 
-All rights reserved © 2025.
+All rights reserved © 2026.

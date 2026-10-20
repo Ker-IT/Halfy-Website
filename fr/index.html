@@ -6,12 +6,12 @@
     ========================================= -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Halfy - Retrouvez-vous à mi-chemin</title>
-    <meta name="description" content="Calculez le point de rencontre parfait entre deux adresses et découvrez les meilleurs endroits pour vous retrouver à mi-chemin." />
+    <title>Halfy - À mi-chemin ou en rencontre privée</title>
+    <meta name="description" content="Halfy aide deux personnes à trouver un lieu équitable à mi-chemin ou à créer une rencontre privée sans dévoiler leur point de départ." />
 
     <!-- Open Graph / Social Media -->
-    <meta property="og:title" content="Halfy - Retrouvez-vous à mi-chemin" />
-    <meta property="og:description" content="Trouvez le point médian parfait entre deux adresses." />
+    <meta property="og:title" content="Halfy - À mi-chemin ou en rencontre privée" />
+    <meta property="og:description" content="Trouvez un lieu équitable à mi-chemin ou créez une rencontre privée à deux avec Halfy." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://halfy.app/fr" />
 
@@ -71,6 +71,7 @@
             color: var(--dark);
             background: var(--white);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         a {
@@ -219,6 +220,26 @@
             background: var(--primary-dark);
         }
 
+        .btn-secondary {
+            color: var(--primary-dark);
+            background: var(--white);
+            border: 1px solid rgba(37,99,235,0.28);
+            padding: 15px 26px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
+
         .store-badge {
             background: black;
             color: white;
@@ -289,9 +310,77 @@
             object-fit: cover;
         }
 
-        /* --- FEATURES --- */
+        /* --- TWO PRODUCT PATHS --- */
+        .paths-section {
+            padding: 100px 20px 40px;
+        }
+
+        .paths-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-heading {
+            max-width: 700px;
+            margin: 0 auto 48px;
+            text-align: center;
+        }
+
+        .section-heading h2 {
+            font-size: 2.5rem;
+            line-height: 1.15;
+            margin-bottom: 14px;
+        }
+
+        .section-heading p {
+            color: var(--gray);
+        }
+
+        .paths-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        .path-card {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            align-items: flex-start;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 36px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.04);
+        }
+
+        .path-label,
+        .feature-label {
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .path-card h3 {
+            margin: 12px 0;
+            font-size: 1.5rem;
+            line-height: 1.25;
+        }
+
+        .path-card p {
+            color: var(--gray);
+            margin-bottom: 24px;
+        }
+
+        .path-card a {
+            margin-top: auto;
+        }
+
+        /* --- BENEFITS --- */
         .features-section {
-            padding: 100px 20px;
+            padding: 60px 20px 100px;
         }
 
         .features-container {
@@ -335,21 +424,19 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.06);
         }
 
-        .feature-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(37,99,235,0.08);
-            margin-bottom: 20px;
-            font-size: 24px;
+        .feature-card::before {
+            content: "";
+            display: block;
+            width: 44px;
+            height: 3px;
+            margin-bottom: 22px;
+            border-radius: 999px;
+            background: var(--primary);
         }
 
         .feature-card h3 {
             font-size: 1.3rem;
-            margin-bottom: 10px;
+            margin: 8px 0 10px;
         }
 
         .feature-card p {
@@ -383,6 +470,24 @@
             color: var(--gray);
             font-size: 1.1rem;
             margin-bottom: 32px;
+        }
+
+        .final-web-actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .android-download {
+            margin-top: 30px;
+            padding-top: 26px;
+            border-top: 1px solid var(--border);
+        }
+
+        .android-download p {
+            margin-bottom: 14px;
+            font-size: 0.95rem;
         }
 
         /* --- FOOTER --- */
@@ -444,6 +549,9 @@
             .mockup-container {
                 margin-top: 20px;
             }
+            .paths-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 640px) {
@@ -458,9 +566,13 @@
                 height: 550px;
             }
             .btn-web,
+            .btn-secondary,
             .store-badge {
                 width: 100%;
                 justify-content: center;
+            }
+            .path-card {
+                padding: 28px 24px;
             }
             .final-cta-box {
                 padding: 40px 24px;
@@ -487,7 +599,7 @@
             <div class="header-actions">
                 <!-- Bouton pointant vers la version originale en anglais (racine du site) -->
                 <a href="../index.html" class="lang-switch" aria-label="Passer en Anglais">EN</a>
-                <a href="https://app.halfy.app" class="btn-header btn-header-primary">Ouvrir l'App</a>
+                <a href="https://app.halfy.app" class="btn-header btn-header-primary">Ouvrir Halfy</a>
             </div>
         </div>
     </header>
@@ -504,37 +616,28 @@
                 <!-- Left Content -->
                 <div class="hero-left">
                     <div class="hero-badge">
-                        <span aria-hidden="true">📍</span> Disponible sur Web et Android
+                        Deux façons de se retrouver avec Halfy
                     </div>
 
                     <h1>
-                        Ne faites plus de jaloux,<br />
-                        retrouvez-vous à <span>mi-chemin</span>.
+                        Retrouvez-vous à <span>mi-chemin</span>.<br />
+                        Retrouvez-vous en privé.
                     </h1>
 
                     <p class="subtitle">
-                        Halfy calcule le point de rencontre idéal entre deux adresses et vous aide à découvrir les meilleurs cafés, bars, restaurants et parcs pour vous retrouver équitablement.
+                        Halfy aide deux personnes à choisir le bon lieu : soit en trouvant le point médian le plus équitable, soit en créant une rencontre privée où chacun garde son point de départ pour soi.
                     </p>
 
                     <div class="cta-group">
-                        <!-- Web App Button -->
                         <a href="https://app.halfy.app" class="btn-web">
-                            <span aria-hidden="true">🚀</span> Ouvrir l'App Web
+                            Ouvrir Halfy
                         </a>
-
-                        <!-- Google Play Button -->
-                        <a href="https://play.google.com/store/apps/details?id=com.crankynx.halfy&referrer=utm_source%3Dwebsite%26utm_medium%3Dorganic%26utm_term%3Dhomepage_hero" target="_blank" rel="noopener noreferrer" class="store-badge">
-                            <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">
-                                <path fill="#fff" d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.3,12.5L17.38,15.69L15.39,13.7L17.38,11.72L20.3,14.9C20.63,13.13 20.63,10.87 20.3,12.5M16.81,8.88L14.54,11.15L6.05,2.66L16.81,8.88Z" />
-                            </svg>
-                            <div class="store-text">
-                                <small>DISPONIBLE SUR</small>
-                                <strong>Google Play</strong>
-                            </div>
+                        <a href="https://app.halfy.app/meet" class="btn-secondary">
+                            Créer une rencontre privée
                         </a>
                     </div>
 
-                    <p class="hero-note">Aucun compte n'est requis pour utiliser Halfy.</p>
+                    <p class="hero-note">Halfway est disponible sur le Web et Android. Private Meet est actuellement disponible sur le Web.</p>
                 </div>
 
                 <!-- Right Content (Mockup) -->
@@ -549,35 +652,61 @@
             </div>
         </section>
 
+        <!-- DEUX FAÇONS DE SE RETROUVER -->
+        <section class="paths-section">
+            <div class="paths-container">
+                <div class="section-heading">
+                    <h2>Deux façons de se retrouver avec Halfy</h2>
+                    <p>Choisissez l'expérience Halfy qui correspond à votre façon d'organiser la rencontre.</p>
+                </div>
+
+                <div class="paths-grid">
+                    <article class="path-card">
+                        <span class="path-label">Halfway</span>
+                        <h3>Trouvez le lieu le plus équitable</h3>
+                        <p>Indiquez deux lieux et Halfy trouve le point médian ainsi que les cafés, restaurants, bars et autres lieux adaptés à proximité.</p>
+                        <a href="https://app.halfy.app/" class="btn-web">Trouver un lieu à mi-chemin</a>
+                    </article>
+
+                    <article class="path-card">
+                        <span class="path-label">Private Meet</span>
+                        <h3>Retrouvez-vous sans partager votre point de départ</h3>
+                        <p>Créez une invitation privée, laissez chacun saisir son propre point de départ, puis proposez, contre-proposez et acceptez ensemble un lieu.</p>
+                        <a href="https://app.halfy.app/meet" class="btn-secondary">Créer une rencontre privée</a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
         <!-- FEATURES SECTION -->
         <section class="features-section">
             <div class="features-container">
                 
                 <div class="features-title">
-                    <h2>Conçu pour des rencontres équitables</h2>
-                    <p>Arrêtez de perdre du temps à décider où vous retrouver. Halfy trouve automatiquement le lieu le plus juste et équitable entre deux personnes.</p>
+                    <h2>Conçu pour mieux se retrouver</h2>
+                    <p>Halfy aide deux personnes à choisir un lieu équitable, adapté et respectueux de leur vie privée.</p>
                 </div>
 
                 <div class="features">
                     <!-- Feature 1 -->
                     <div class="feature-card">
-                        <div class="feature-icon" aria-hidden="true">⚖️</div>
-                        <h3>Équitable</h3>
+                        <span class="feature-label">Équitable</span>
+                        <h3>Retrouvez-vous au milieu</h3>
                         <p>Halfy calcule le point médian exact entre deux adresses pour garantir des déplacements équilibrés.</p>
                     </div>
 
                     <!-- Feature 2 -->
                     <div class="feature-card">
-                        <div class="feature-icon" aria-hidden="true">☕</div>
-                        <h3>Découverte</h3>
+                        <span class="feature-label">Découverte</span>
+                        <h3>Trouvez le bon endroit</h3>
                         <p>Découvrez des cafés, bars, parcs et restaurants près de chez vous que vous n'auriez jamais remarqués autrement.</p>
                     </div>
 
                     <!-- Feature 3 -->
                     <div class="feature-card">
-                        <div class="feature-icon" aria-hidden="true">🔒</div>
-                        <h3>Confidentialité</h3>
-                        <p>Votre position n'est jamais sauvegardée de façon permanente. Vos recherches sont éphémères et respectueuses de votre vie privée.</p>
+                        <span class="feature-label">Confidentialité</span>
+                        <h3>Votre point de départ reste le vôtre</h3>
+                        <p>Halfy évite d'exposer inutilement les informations de localisation. Dans Private Meet, les participants ne voient pas le point de départ de l'autre et les données de session sont temporaires.</p>
                     </div>
                 </div>
 
@@ -588,13 +717,19 @@
         <section class="final-cta">
             <div class="final-cta-box">
                 <h2>Facilitez vos prochains rendez-vous.</h2>
-                <p>Ouvrez Halfy instantanément dans votre navigateur ou téléchargez l'application sur Android.</p>
+                <p>Trouvez un lieu équitable à mi-chemin ou créez une rencontre privée dans votre navigateur.</p>
                 
-                <div class="cta-group" style="justify-content:center;">
+                <div class="final-web-actions">
                     <a href="https://app.halfy.app" class="btn-web">
-                        Ouvrir l'App Web
+                        Ouvrir Halfy
                     </a>
-                    
+                    <a href="https://app.halfy.app/meet" class="btn-secondary">
+                        Créer une rencontre privée
+                    </a>
+                </div>
+
+                <div class="android-download">
+                    <p>Téléchargez l'expérience Halfy classique pour Android :</p>
                     <a href="https://play.google.com/store/apps/details?id=com.crankynx.halfy" target="_blank" rel="noopener noreferrer" class="store-badge">
                         <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">
                             <path fill="#fff" d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.3,12.5L17.38,15.69L15.39,13.7L17.38,11.72L20.3,14.9C20.63,13.13 20.63,10.87 20.3,12.5M16.81,8.88L14.54,11.15L6.05,2.66L16.81,8.88Z" />

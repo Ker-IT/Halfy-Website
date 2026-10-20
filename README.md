@@ -3,9 +3,9 @@
 ![Project Status](https://img.shields.io/badge/status-live-success)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-This repository hosts the source code for the official website of **Halfy**, a mobile application that calculates the fair geographical midpoint between two addresses to suggest meeting places.
+This repository hosts the source code for the official website of **Halfy**, which helps two people meet through either a fair halfway search or a private Web meeting flow.
 
-The website serves as a showcase for the app, provides download links, and hosts the legal documentation (Privacy Policy).
+The website presents both Halfy experiences, provides Web and Android links, and hosts the legal documentation (Privacy Policy).
 
 🔗 **Live Website:** [https://halfy.app](https://halfy.app/)
 
@@ -51,8 +51,8 @@ git clone https://github.com/Ker-IT/Halfy-Website.git
     - Simply double-click on index.html.
     - OR use a VS Code extension like Live Server (recommended for auto-refresh).
 
-## 📱 About the App (Halfy)
-Halfy is a mobile application built with React Native and Expo. It helps users find fair meeting spots (bars, restaurants, parks) by calculating the exact midpoint between two locations.
+## 📱 About Halfy
+Halfy offers the classic Halfway experience on Web and Android, plus Private Meet on the Web. Both experiences belong to the same Halfy product.
 
 - **Publisher:** Kër IT
 - **Platforms:** Android (Google Play) & iOS (Coming soon)

@@ -1,0 +1,42 @@
+{% macro render(business) %}
+<section id="business" class="business-section" aria-labelledby="business-heading">
+  <div class="business-container">
+    <div class="business-content">
+      <div class="business-eyebrow-row">
+        {% if business.logoSrc %}
+        <img
+          src="{{ business.logoSrc }}"
+          alt=""
+          width="{{ business.logoWidth | default(44) }}"
+          height="{{ business.logoHeight | default(30) }}"
+          class="business-brand-mark"
+          aria-hidden="true"
+        />
+        {% endif %}
+        <span class="business-eyebrow">{{ business.eyebrow }}</span>
+        <span class="business-status">{{ business.statusLabel }}</span>
+      </div>
+      <h2 id="business-heading">{{ business.heading }}</h2>
+      <p class="business-lead">{{ business.lead }}</p>
+      <p class="business-note">{{ business.note }}</p>
+    </div>
+
+    <div class="business-panel">
+      <h3>{{ business.panelTitle }}</h3>
+      <ul class="business-list">
+        {% for item in business.useCases %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      <div class="business-actions">
+        <a href="{{ business.ctaHref }}" class="btn-business">
+          {{ business.ctaLabel }}
+        </a>
+        {% if business.secondaryText %}
+        <p class="business-disclaimer">{{ business.secondaryText }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endmacro %}

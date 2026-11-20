@@ -1,0 +1,51 @@
+{%- set currentLang = lang | default(site.defaultLang) -%}
+{%- set routeEntry = routes[routeKey] -%}
+{%- set canonicalPath = routeEntry[currentLang] if routeEntry else page.url -%}
+{%- set enPath = routeEntry.en if routeEntry else page.url -%}
+{%- set frPath = routeEntry.fr if routeEntry else page.url -%}
+{%- set canonicalUrl = site.url + canonicalPath -%}
+{%- set enUrl = site.url + enPath -%}
+{%- set frUrl = site.url + frPath -%}
+{%- set t = i18n[currentLang] -%}
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{{ title }}</title>
+<meta name="description" content="{{ description }}" />
+<link rel="canonical" href="{{ canonicalUrl }}" />
+
+{% if routeEntry %}
+<link rel="alternate" hreflang="en" href="{{ enUrl }}" />
+<link rel="alternate" hreflang="fr" href="{{ frUrl }}" />
+<link rel="alternate" hreflang="x-default" href="{{ enUrl }}" />
+{% endif %}
+
+<!-- Open Graph / Social Media -->
+<meta property="og:title" content="{{ ogTitle | default(title) }}" />
+<meta property="og:description" content="{{ ogDescription | default(description) }}" />
+<meta property="og:type" content="{{ ogType | default('website') }}" />
+<meta property="og:url" content="{{ canonicalUrl }}" />
+<meta property="og:site_name" content="{{ site.name }}" />
+<meta property="og:locale" content="{{ t.locale }}" />
+<meta property="og:image" content="{{ site.url }}{{ ogImage | default(site.ogImage) }}" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="{{ twitterCard | default('summary') }}" />
+<meta name="twitter:title" content="{{ ogTitle | default(title) }}" />
+<meta name="twitter:description" content="{{ ogDescription | default(description) }}" />
+<meta name="twitter:image" content="{{ site.url }}{{ ogImage | default(site.ogImage) }}" />
+
+<!-- Favicons & Web Manifest (root-relative paths compatible with nested routes) -->
+<link rel="icon" href="/assets/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" href="/assets/icon-192.png" sizes="192x192" />
+<link rel="icon" type="image/png" href="/assets/icon-512.png" sizes="512x512" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/site.webmanifest" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+<!-- Shared Design System -->
+<link rel="stylesheet" href="/assets/styles/main.css" />

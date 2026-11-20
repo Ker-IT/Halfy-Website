@@ -1,0 +1,55 @@
+---
+layout: layouts/base.njk
+---
+{% import "components/product-hero.njk" as ProductHero %}
+{% import "components/product-card.njk" as ProductCard %}
+{% import "components/business-banner.njk" as BusinessBanner %}
+{% import "components/benefit-card.njk" as BenefitCard %}
+{% import "components/cta-banner.njk" as CTABanner %}
+
+<!-- SECTION 1 : HERO PRINCIPAL -->
+{{ ProductHero.render(hero) }}
+
+<!-- SECTION 2 : PRÉSENTATION DES PRODUITS -->
+<section class="paths-section">
+  <div class="paths-container">
+    <div class="section-heading">
+      {% if productsSection.eyebrow %}
+      <p class="section-eyebrow">{{ productsSection.eyebrow }}</p>
+      {% endif %}
+      <h2>{{ productsSection.heading }}</h2>
+      <p>{{ productsSection.subheading }}</p>
+    </div>
+
+    <div class="paths-grid">
+      {% for card in productsSection.cards %}
+        {{ ProductCard.render(card) }}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3 : SAFEMEET BUSINESS -->
+{{ BusinessBanner.render(businessSection) }}
+
+<!-- SECTION 4 : BÉNÉFICES COMMUNS -->
+<section class="features-section">
+  <div class="features-container">
+    <div class="features-title">
+      {% if benefitsSection.eyebrow %}
+      <p class="section-eyebrow">{{ benefitsSection.eyebrow }}</p>
+      {% endif %}
+      <h2>{{ benefitsSection.heading }}</h2>
+      <p>{{ benefitsSection.subheading }}</p>
+    </div>
+
+    <div class="features features--4col">
+      {% for item in benefitsSection.items %}
+        {{ BenefitCard.render(item) }}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5 : DISPONIBILITÉ -->
+{{ CTABanner.render(availabilitySection, site.apps) }}

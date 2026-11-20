@@ -1,0 +1,11 @@
+{% if site.analytics and site.analytics.ga4Id %}
+<!-- Google Analytics 4 (Centralized inside <head>).
+     Note: Consent management (CMP) and B2B conversion events will be reviewed in WEB-B2B-07. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.analytics.ga4Id }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', '{{ site.analytics.ga4Id }}');
+</script>
+{% endif %}

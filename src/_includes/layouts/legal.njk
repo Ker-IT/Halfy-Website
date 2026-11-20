@@ -1,0 +1,16 @@
+---
+layout: layouts/base.njk
+bodyClass: page-legal
+---
+{%- set currentLang = lang | default(site.defaultLang) -%}
+{%- set t = i18n[currentLang] -%}
+{%- set homeUrl = routes.home[currentLang] -%}
+
+<div class="legal-main">
+  <div class="legal-breadcrumb">
+    <a href="{{ homeUrl }}" class="back-link">{{ t.backToSite }}</a>
+  </div>
+  <div class="document-container">
+    {{ content | safe }}
+  </div>
+</div>

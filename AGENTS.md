@@ -30,6 +30,12 @@ Ce document définit les règles techniques et éditoriales à respecter lors de
 ## 4. Charte éditoriale, véracité produit et contenus
 
 - **Règle obligatoire pour tout agent de développement (Gemini, Codex, Claude ou tout futur outil) :** avant toute création ou modification de contenu destiné aux utilisateurs (pages, titres SEO, métadonnées, libellés de navigation, textes alternatifs, formulaires), consulter et respecter intégralement [`docs/EDITORIAL_GUIDELINES.md`](docs/EDITORIAL_GUIDELINES.md).
+- **Architecture officielle des marques (règle permanente) :**
+  - **Halfy** est le nom officiel de l'application (Web et Android), et non uniquement une marque ombrelle.
+  - **Halfway** est uniquement un terme descriptif anglais (ex. *Meet halfway with Halfy*) et ne doit plus être utilisé comme marque ou nom de produit indépendant.
+  - **SafeMeet** (*SafeMeet by Halfy*) est le nom officiel actuel de l'ancien produit *Private Meet* ; ne plus exposer *Private Meet* sur les pages publiques (et ne pas formuler les CTA comme « Créer un SafeMeet » / *« Create a SafeMeet »*, utiliser « Créer une rencontre » / *« Create a meetup »*).
+  - **SafeMeet Business** est la déclinaison professionnelle de SafeMeet.
+  - **Kër IT** est la future société éditrice, actuellement **en cours de formation** (ne pas la présenter comme déjà immatriculée ni inventer d'identifiants légaux).
 - Ne jamais présenter une fonctionnalité future (API B2B, widget marketplace, IA, facturation) comme déjà disponible en production.
 - Ne jamais promettre de garantie de sécurité absolue, de réduction de fraude ou de résultat commercial non démontré.
 - Ne jamais modifier le fond des politiques de confidentialité (`/privacy.html`, `/fr/privacy.html`) sans validation explicite.

@@ -10,7 +10,7 @@ export default {
     switchLangShort: "FR",
     switchLangAria: "Switch to French",
     backToSite: "← Back to website",
-    footerPublisherHtml: "Halfy is a product of <strong>Kër IT</strong>.",
+    footerPublisherHtml: "Halfy is a product of <strong>Kër IT</strong> (company in formation).",
     footerRights: "© 2026 Kër IT. All rights reserved.",
     footerCategories: {
       products: "Products",
@@ -18,7 +18,7 @@ export default {
       company: "Kër IT",
       legal: "Privacy",
     },
-    legalFooterCopyright: "© 2026 Kër IT",
+    legalFooterCopyright: "© 2026 Kër IT (company in formation)",
   },
   fr: {
     locale: "fr_FR",
@@ -31,7 +31,7 @@ export default {
     switchLangShort: "EN",
     switchLangAria: "Passer en anglais",
     backToSite: "← Retour au site",
-    footerPublisherHtml: "Halfy est un produit de <strong>Kër IT</strong>.",
+    footerPublisherHtml: "Halfy est un produit de <strong>Kër IT</strong> (société en cours de formation).",
     footerRights: "© 2026 Kër IT. Tous droits réservés.",
     footerCategories: {
       products: "Produits",
@@ -39,6 +39,6 @@ export default {
       company: "Kër IT",
       legal: "Confidentialité",
     },
-    legalFooterCopyright: "© 2026 Kër IT",
+    legalFooterCopyright: "© 2026 Kër IT (société en cours de formation)",
   },
 };

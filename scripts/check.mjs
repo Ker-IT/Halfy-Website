@@ -21,10 +21,12 @@ execSync("npx eleventy", { cwd: rootDir, stdio: "inherit" });
 console.log("2. Verifying required generated files...");
 const requiredFiles = [
   "index.html",
+  "halfy/index.html",
   "halfway/index.html",
   "safemeet/index.html",
   "privacy.html",
   "fr/index.html",
+  "fr/halfy/index.html",
   "fr/halfway/index.html",
   "fr/safemeet/index.html",
   "fr/privacy.html",
@@ -61,29 +63,116 @@ for (const icon of manifest.icons || []) {
   assert(fs.existsSync(diskPath), `Manifest icon file missing in _site: ${icon.src}`);
 }
 
-// Future routes not yet implemented must NOT appear in sitemap or links
+// Sitemap must list canonical Halfy/SafeMeet routes and exclude redirects or future B2B routes
 const sitemap = fs.readFileSync(path.join(siteDir, "sitemap.xml"), "utf8");
-const forbiddenFutureRoutes = ["/business", "/developers", "/pricing"];
-for (const forbidden of forbiddenFutureRoutes) {
-  assert(!sitemap.includes(forbidden), `Sitemap must not reference unavailable route: ${forbidden}`);
+const forbiddenSitemapRoutes = ["/halfway", "/business", "/developers", "/pricing"];
+for (const forbidden of forbiddenSitemapRoutes) {
+  assert(!sitemap.includes(forbidden), `Sitemap must not reference route: ${forbidden}`);
 }
-assert(sitemap.includes("https://halfy.app/halfway/"), "Sitemap missing /halfway/");
-assert(sitemap.includes("https://halfy.app/fr/halfway/"), "Sitemap missing /fr/halfway/");
+assert(sitemap.includes("https://halfy.app/halfy/"), "Sitemap missing /halfy/");
+assert(sitemap.includes("https://halfy.app/fr/halfy/"), "Sitemap missing /fr/halfy/");
 assert(sitemap.includes("https://halfy.app/safemeet/"), "Sitemap missing /safemeet/");
 assert(sitemap.includes("https://halfy.app/fr/safemeet/"), "Sitemap missing /fr/safemeet/");
 
-const htmlPages = [
-  { file: "index.html", lang: "en", expectedCanonical: "https://halfy.app/", switchTarget: "/fr/" },
-  { file: "fr/index.html", lang: "fr", expectedCanonical: "https://halfy.app/fr/", switchTarget: "/" },
-  { file: "halfway/index.html", lang: "en", expectedCanonical: "https://halfy.app/halfway/", switchTarget: "/fr/halfway/" },
-  { file: "fr/halfway/index.html", lang: "fr", expectedCanonical: "https://halfy.app/fr/halfway/", switchTarget: "/halfway/" },
-  { file: "safemeet/index.html", lang: "en", expectedCanonical: "https://halfy.app/safemeet/", switchTarget: "/fr/safemeet/" },
-  { file: "fr/safemeet/index.html", lang: "fr", expectedCanonical: "https://halfy.app/fr/safemeet/", switchTarget: "/safemeet/" },
-  { file: "privacy.html", lang: "en", expectedCanonical: "https://halfy.app/privacy.html", switchTarget: "/fr/privacy.html" },
-  { file: "fr/privacy.html", lang: "fr", expectedCanonical: "https://halfy.app/fr/privacy.html", switchTarget: "/privacy.html" },
+const redirectPages = [
+  { file: "halfway/index.html", lang: "en", target: "/halfy/", expectedCanonical: "https://halfy.app/halfy/" },
+  { file: "fr/halfway/index.html", lang: "fr", target: "/fr/halfy/", expectedCanonical: "https://halfy.app/fr/halfy/" },
 ];
 
-console.log("3. Validating HTML pages, links, assets, SEO, mobile nav, and analytics...");
+for (const redir of redirectPages) {
+  const html = fs.readFileSync(path.join(siteDir, redir.file), "utf8");
+  assert(html.includes(`<html lang="${redir.lang}">`), `${redir.file}: wrong lang`);
+  assert(html.includes('<meta name="robots" content="noindex, follow" />'), `${redir.file}: missing noindex`);
+  assert(
+    html.includes(`<link rel="canonical" href="${redir.expectedCanonical}" />`),
+    `${redir.file}: missing canonical to ${redir.expectedCanonical}`
+  );
+  assert(
+    html.includes(`<meta http-equiv="refresh" content="0; url=${redir.target}" />`),
+    `${redir.file}: missing meta refresh to ${redir.target}`
+  );
+  assert(html.includes(`href="${redir.target}"`), `${redir.file}: missing accessible fallback link`);
+  assert(!html.includes("how-it-works"), `${redir.file}: must not duplicate commercial content`);
+}
+
+const htmlPages = [
+  {
+    file: "index.html",
+    lang: "en",
+    expectedCanonical: "https://halfy.app/",
+    switchTarget: "/fr/",
+    activeProductHref: null,
+    expectedCtaLabel: "Open Halfy",
+    expectedCtaHref: "https://app.halfy.app/",
+  },
+  {
+    file: "fr/index.html",
+    lang: "fr",
+    expectedCanonical: "https://halfy.app/fr/",
+    switchTarget: "/",
+    activeProductHref: null,
+    expectedCtaLabel: "Ouvrir Halfy",
+    expectedCtaHref: "https://app.halfy.app/",
+  },
+  {
+    file: "halfy/index.html",
+    lang: "en",
+    expectedCanonical: "https://halfy.app/halfy/",
+    switchTarget: "/fr/halfy/",
+    activeProductHref: "/halfy/",
+    expectedCtaLabel: "Open Halfy",
+    expectedCtaHref: "https://app.halfy.app/",
+  },
+  {
+    file: "fr/halfy/index.html",
+    lang: "fr",
+    expectedCanonical: "https://halfy.app/fr/halfy/",
+    switchTarget: "/halfy/",
+    activeProductHref: "/fr/halfy/",
+    expectedCtaLabel: "Ouvrir Halfy",
+    expectedCtaHref: "https://app.halfy.app/",
+  },
+  {
+    file: "safemeet/index.html",
+    lang: "en",
+    expectedCanonical: "https://halfy.app/safemeet/",
+    switchTarget: "/fr/safemeet/",
+    activeProductHref: "/safemeet/",
+    expectedCtaLabel: "Create a meetup",
+    expectedCtaHref: "https://app.halfy.app/meet",
+  },
+  {
+    file: "fr/safemeet/index.html",
+    lang: "fr",
+    expectedCanonical: "https://halfy.app/fr/safemeet/",
+    switchTarget: "/safemeet/",
+    activeProductHref: "/fr/safemeet/",
+    expectedCtaLabel: "Créer une rencontre",
+    expectedCtaHref: "https://app.halfy.app/meet",
+  },
+  {
+    file: "privacy.html",
+    lang: "en",
+    expectedCanonical: "https://halfy.app/privacy.html",
+    switchTarget: "/fr/privacy.html",
+    activeProductHref: null,
+    expectedCtaLabel: "Open Halfy",
+    expectedCtaHref: "https://app.halfy.app/",
+  },
+  {
+    file: "fr/privacy.html",
+    lang: "fr",
+    expectedCanonical: "https://halfy.app/fr/privacy.html",
+    switchTarget: "/privacy.html",
+    activeProductHref: null,
+    expectedCtaLabel: "Ouvrir Halfy",
+    expectedCtaHref: "https://app.halfy.app/",
+  },
+];
+
+const forbiddenFutureRoutes = ["/halfway", "/business", "/developers", "/pricing"];
+
+console.log("3. Validating HTML pages, links, brand naming, assets, SEO, navigation, and analytics...");
 for (const page of htmlPages) {
   const html = fs.readFileSync(path.join(siteDir, page.file), "utf8");
 
@@ -110,13 +199,81 @@ for (const page of htmlPages) {
     `${page.file}: missing or wrong EN/FR switcher target (${page.switchTarget})`
   );
 
-  // Mobile navigation must be present and active now that Halfway & SafeMeet are enabled
+  // Old dropdown must be completely removed
+  assert(!html.includes("data-dropdown"), `${page.file}: obsolete data-dropdown attribute still present`);
+  assert(!html.includes("desktop-products-menu"), `${page.file}: obsolete desktop-products-menu still present`);
+  assert(!html.includes("nav-dropdown"), `${page.file}: obsolete nav-dropdown class still present`);
+  assert(!html.includes("mobile-nav-group-label"), `${page.file}: obsolete mobile-nav-group-label still present`);
+
+  // Direct desktop product links + logos + mobile drawer must be present
+  const expectedHalfyUrl = page.lang === "fr" ? "/fr/halfy/" : "/halfy/";
+  const expectedSafeMeetUrl = page.lang === "fr" ? "/fr/safemeet/" : "/safemeet/";
+  const siteNavMatch = html.match(/<nav class="site-nav"[\s\S]*?<\/nav>/);
+  assert(siteNavMatch, `${page.file}: missing desktop .site-nav`);
+  const siteNavHtml = siteNavMatch ? siteNavMatch[0] : "";
+  assert(siteNavHtml.includes(`href="${expectedHalfyUrl}"`), `${page.file}: desktop nav missing Halfy link`);
+  assert(siteNavHtml.includes(`href="${expectedSafeMeetUrl}"`), `${page.file}: desktop nav missing SafeMeet link`);
+  assert(siteNavHtml.includes("/assets/icon-192.png"), `${page.file}: desktop nav missing Halfy icon`);
+  assert(
+    siteNavHtml.includes("/assets/safemeet-logos/svg/logo-symbol.svg"),
+    `${page.file}: desktop nav missing SafeMeet logo`
+  );
+
+  // Active state check in desktop nav and mobile drawer
+  const headerMatch = html.match(/<header class="site-header">[\s\S]*?<\/header>/);
+  const headerHtml = headerMatch ? headerMatch[0] : "";
+  const activeAttrMatches = headerHtml.match(/aria-current="page"/g) || [];
+  if (page.activeProductHref) {
+    assert(
+      activeAttrMatches.length === 2,
+      `${page.file}: expected 2 aria-current="page" links (desktop + mobile), found ${activeAttrMatches.length}`
+    );
+    assert(
+      siteNavHtml.includes(`href="${page.activeProductHref}"`) && siteNavHtml.includes('aria-current="page"'),
+      `${page.file}: desktop nav missing active state for ${page.activeProductHref}`
+    );
+  } else {
+    assert(
+      activeAttrMatches.length === 0,
+      `${page.file}: unexpected aria-current="page" in header (${activeAttrMatches.length})`
+    );
+  }
+
+  // Contextual header CTA check (desktop + mobile)
+  const expectedCtaPattern = new RegExp(
+    `<a[^>]*href="${page.expectedCtaHref.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"[^>]*class="btn-header btn-header-primary"[^>]*>\\s*${page.expectedCtaLabel}\\s*</a>`,
+    "g"
+  );
+  const ctaMatches = headerHtml.match(expectedCtaPattern) || [];
+  assert(
+    ctaMatches.length === 2,
+    `${page.file}: expected contextual header CTA '${page.expectedCtaLabel}' -> '${page.expectedCtaHref}' in both desktop and mobile header, found ${ctaMatches.length}`
+  );
+  assert(
+    !/Request a demo|Demander une démo/i.test(headerHtml),
+    `${page.file}: unavailable Business CTA must not appear in header`
+  );
+
   assert(html.includes("data-nav-toggle"), `${page.file}: missing mobile nav toggle`);
   assert(html.includes('id="mobile-navigation-drawer"'), `${page.file}: missing mobile drawer`);
 
   const h1Matches = html.match(/<h1[\s>]/g) || [];
   assert(h1Matches.length === 1, `${page.file}: expected 1 <h1>, found ${h1Matches.length}`);
   assert(!html.includes("—"), `${page.file}: contains forbidden em dash (—)`);
+
+  // Official brand architecture checks (no Private Meet, no standalone Halfway, no Create a SafeMeet)
+  assert(!/\bPrivate\s+Meet\b/i.test(html), `${page.file}: contains legacy 'Private Meet' brand name`);
+  assert(
+    !/Create a SafeMeet|Créer un SafeMeet/i.test(html),
+    `${page.file}: contains forbidden 'Create a SafeMeet' / 'Créer un SafeMeet' CTA`
+  );
+  assert(!html.includes("Halfway"), `${page.file}: contains 'Halfway' as capitalized product name`);
+
+  if (page.lang === "fr") {
+    assert(html.includes("société en cours de formation"), `${page.file}: missing Kër IT legal status in FR`);
+  } else {
+    assert(html.includes("company in formation"), `${page.file}: missing Kër IT legal status in EN`);
+  }
 
   const attrRegex = /\b(?:href|src)="([^"]+)"/g;
   let match;
@@ -132,7 +289,7 @@ for (const page of htmlPages) {
     }
 
     for (const forbidden of forbiddenFutureRoutes) {
-      assert(!target.startsWith(forbidden), `${page.file}: link to unavailable route ${target}`);
+      assert(!target.startsWith(forbidden), `${page.file}: link to deprecated/unavailable route ${target}`);
     }
 
     const cleanTarget = target.split("#")[0].split("?")[0];
@@ -151,7 +308,7 @@ for (const page of htmlPages) {
   }
 }
 
-for (const pageFile of ["index.html", "fr/index.html", "halfway/index.html", "fr/halfway/index.html"]) {
+for (const pageFile of ["index.html", "fr/index.html", "halfy/index.html", "fr/halfy/index.html"]) {
   const html = fs.readFileSync(path.join(siteDir, pageFile), "utf8");
   assert(html.includes("https://app.halfy.app"), `${pageFile}: missing WebApp link`);
   assert(html.includes("https://app.halfy.app/meet"), `${pageFile}: missing SafeMeet/Meet link`);
@@ -175,7 +332,7 @@ for (const pageFile of ["safemeet/index.html", "fr/safemeet/index.html"]) {
     `${pageFile}: missing SafeMeet Open Graph image`
   );
   assert(html.includes('name="twitter:card" content="summary_large_image"'), `${pageFile}: wrong twitter:card`);
-  assert(!html.includes("screen_1.png") && !html.includes("screen_2.png"), `${pageFile}: must not reuse Halfway screenshots`);
+  assert(!html.includes("screen_1.png") && !html.includes("screen_2.png"), `${pageFile}: must not reuse Halfy screenshots`);
 }
 
 console.log("4. Checking JS syntax...");
@@ -193,4 +350,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log("\nAll WEB-B2B-03 checks passed!");
+console.log("\nAll WEB-B2B-03.3 checks passed!");

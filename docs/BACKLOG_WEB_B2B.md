@@ -1,13 +1,15 @@
 # Backlog Chantier WEB-B2B — Site Vitrine Halfy
 
-Ce backlog encadre l'évolution progressive du site vitrine `Ker-IT/Halfy-Website` vers une présentation multiproduit **Halfy / Halfway / SafeMeet by Halfy / SafeMeet Business**.
+Ce backlog encadre l'évolution progressive du site vitrine `Ker-IT/Halfy-Website` vers une présentation multiproduit **Halfy / SafeMeet by Halfy / SafeMeet Business** (édité par **Kër IT**, société en cours de formation).
 
 | Lot | Titre | Dépendances | Statut |
 |---|---|---|---|
 | **WEB-B2B-01** | Architecture, design system et navigation (Eleventy, i18n, SEO structurel, assets, CI) | Aucune | Implémenté (socle en place) |
-| **WEB-B2B-02** | Nouvelle page d'accueil multiproduit (`/`, `/fr/`) et page Halfway (`/halfway/`, `/fr/halfway/`) | WEB-B2B-01 | Implémenté |
-| **WEB-B2B-02.1** | Charte éditoriale (`docs/EDITORIAL_GUIDELINES.md`) et révision des contenus FR/EN | WEB-B2B-02 | Implémenté (en attente validation) |
+| **WEB-B2B-02** | Nouvelle page d'accueil multiproduit (`/`, `/fr/`) et pages produit Halfy | WEB-B2B-01 | Implémenté |
+| **WEB-B2B-02.1** | Charte éditoriale (`docs/EDITORIAL_GUIDELINES.md`) et révision des contenus FR/EN | WEB-B2B-02 | Implémenté |
 | **WEB-B2B-03** | Landing page SafeMeet B2C (`/safemeet/`, `/fr/safemeet/`) et intégration du kit logos | WEB-B2B-01, WEB-B2B-02.1 | Implémenté |
+| **WEB-B2B-03.2** | Harmonisation des marques Halfy, SafeMeet et Kër IT + routes `/halfy/`, `/fr/halfy/` | WEB-B2B-03 | Implémenté |
+| **WEB-B2B-03.3** | Simplification du header (navigation directe Halfy / SafeMeet) et CTA contextuels | WEB-B2B-03.2 | Implémenté |
 | **WEB-B2B-03.1** | Inventaire des capacités B2B réelles (audit croisé WebApp, Backend, Mobile & roadmap) | WEB-B2B-01 | À faire (bloquant pour B2B) |
 | **WEB-B2B-04** | Landing page SafeMeet Business (`/business/`) et Marketplaces (`/business/marketplaces/`) | WEB-B2B-03, WEB-B2B-03.1 | À faire |
 | **WEB-B2B-05** | Démonstration marketplace interactive simulée (`/business/demo/`) | WEB-B2B-04 | À faire |

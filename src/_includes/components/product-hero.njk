@@ -1,0 +1,44 @@
+{% macro render(heroData) %}
+<section class="hero {% if heroData.variant %}hero--{{ heroData.variant }}{% endif %}">
+  <div class="hero-container">
+    <div class="hero-left">
+      {% if heroData.eyebrow %}
+      <p class="hero-eyebrow">{{ heroData.eyebrow }}</p>
+      {% endif %}
+
+      <h1>
+        {% if heroData.titleHighlight %}
+          {{ heroData.titlePrefix }}<span>{{ heroData.titleHighlight }}</span>{{ heroData.titleSuffix }}
+        {% else %}
+          {{ heroData.title }}
+        {% endif %}
+      </h1>
+
+      <p class="subtitle">{{ heroData.subtitle }}</p>
+
+      <div class="cta-group">
+        <a href="{{ heroData.primaryCta.href }}" class="btn-web">
+          {{ heroData.primaryCta.label }}
+        </a>
+        {% if heroData.secondaryCta %}
+        <a href="{{ heroData.secondaryCta.href }}" class="btn-secondary">
+          {{ heroData.secondaryCta.label }}
+        </a>
+        {% endif %}
+      </div>
+
+      {% if heroData.note %}
+      <p class="hero-note">{{ heroData.note }}</p>
+      {% endif %}
+    </div>
+
+    <div class="mockup-container">
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <img src="{{ heroData.imageSrc }}" alt="{{ heroData.imageAlt }}" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endmacro %}

@@ -1,0 +1,51 @@
+{%- set currentLang = lang | default(site.defaultLang) -%}
+{%- set t = i18n[currentLang] -%}
+{%- set privacyUrl = routes[navigation.footer.privacy.routeKey][currentLang] -%}
+{%- set homeUrl = routes.home[currentLang] -%}
+
+<footer class="site-footer">
+  <div class="footer-grid-container">
+    <div class="footer-brand-col">
+      <a href="{{ homeUrl }}" class="footer-logo" aria-label="{{ t.brandAriaLabel }}">
+        Halfy<span aria-hidden="true">.</span>
+      </a>
+      <p class="footer-publisher">{{ t.footerPublisherHtml | safe }}</p>
+      <p class="legal">{{ t.footerRights }}</p>
+    </div>
+
+    <div class="footer-columns">
+      <div class="footer-col">
+        <h3>{{ t.footerCategories.products }}</h3>
+        <ul>
+          <li><a href="{{ routes.halfway[currentLang] }}">Halfway</a></li>
+          <li><a href="{{ routes.safemeet[currentLang] }}">SafeMeet by Halfy</a></li>
+          <li><a href="{{ navigation.footer.safeMeetApp.href }}" target="_blank" rel="noopener noreferrer">{{ navigation.footer.safeMeetApp.labels[currentLang] }}</a></li>
+          <li><a href="{{ navigation.footer.webApp.href }}">{{ navigation.footer.webApp.labels[currentLang] }}</a></li>
+          <li><a href="{{ navigation.footer.androidApp.href }}" target="_blank" rel="noopener noreferrer">{{ navigation.footer.androidApp.labels[currentLang] }}</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>{{ t.footerCategories.business }}</h3>
+        <ul>
+          <li><a href="{{ navigation.footer.businessAnchor.urls[currentLang] }}">{{ navigation.footer.businessAnchor.labels[currentLang] }}</a></li>
+          <li><a href="{{ navigation.footer.businessContact.urls[currentLang] }}">{{ navigation.footer.businessContact.labels[currentLang] }}</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>{{ t.footerCategories.company }}</h3>
+        <ul>
+          <li><a href="{{ navigation.footer.contact.href }}">{{ navigation.footer.contact.labels[currentLang] }}</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>{{ t.footerCategories.legal }}</h3>
+        <ul>
+          <li><a href="{{ privacyUrl }}">{{ navigation.footer.privacy.labels[currentLang] }}</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>

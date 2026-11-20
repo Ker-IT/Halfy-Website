@@ -1,0 +1,22 @@
+{%- set currentLang = lang | default(site.defaultLang) -%}
+{%- set t = i18n[currentLang] -%}
+<!DOCTYPE html>
+<html lang="{{ currentLang }}">
+<head>
+  {% include "components/head-seo.njk" %}
+  {% include "components/analytics.njk" %}
+</head>
+<body class="{% if bodyClass %}{{ bodyClass }}{% endif %}">
+  <a href="#main-content" class="skip-link">{{ t.skipToContent }}</a>
+
+  {% include "components/header.njk" %}
+
+  <main id="main-content">
+    {{ content | safe }}
+  </main>
+
+  {% include "components/footer.njk" %}
+
+  <script src="/assets/scripts/main.js" defer></script>
+</body>
+</html>

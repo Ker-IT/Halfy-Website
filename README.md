@@ -1,63 +1,86 @@
-# Halfy - Official Landing Page
+# Halfy — Site Vitrine Officiel (`halfy.app`)
 
-![Project Status](https://img.shields.io/badge/status-live-success)
-![License](https://img.shields.io/badge/license-MIT-blue)
+Site vitrine statique officiel de **Halfy** (édité par **Kër IT**), généré avec **Eleventy (11ty)** et conçu pour être déployé sur **GitHub Pages** (`halfy.app`).
 
-This repository hosts the source code for the official website of **Halfy**, which helps two people meet through either a fair halfway search or a private Web meeting flow.
+- **Site vitrine :** [https://halfy.app](https://halfy.app/)
+- **WebApp Halfy / Halfway :** [https://app.halfy.app](https://app.halfy.app/)
+- **Expérience Private Meet / SafeMeet :** [https://app.halfy.app/meet](https://app.halfy.app/meet)
+- **Application Android :** [Google Play (`com.crankynx.halfy`)](https://play.google.com/store/apps/details?id=com.crankynx.halfy)
 
-The website presents both Halfy experiences, provides Web and Android links, and hosts the legal documentation (Privacy Policy).
+---
 
-🔗 **Live Website:** [https://halfy.app](https://halfy.app/)
+## Architecture technique
 
-## 🚀 Features
+- **Générateur statique :** Eleventy (`@11ty/eleventy` v3, templates Nunjucks `.njk`, sortie dans `_site/`).
+- **Styles & scripts :** CSS mutualisé (`src/assets/styles/main.css`) sans framework externe, JS minimal accessible (`src/assets/scripts/main.js`).
+- **Internationalisation :** Statique à la compilation — anglais à la racine (`/`), français sous `/fr/`.
+- **Hébergement cible :** GitHub Pages avec domaine personnalisé (`CNAME: halfy.app`).
+- **Adaptateur de prévisualisation (développement uniquement) :** `server.js` (Express) sert le répertoire `_site/` sur `0.0.0.0:3000` pour la prévisualisation locale et Google AI Studio. Il n’est **pas** requis en production.
 
-- **Responsive Design:** Optimized for both desktop and mobile devices.
-- **Multi-language Support:**
-  - 🇬🇧 **English:** Default (Root directory).
-  - 🇫🇷 **French:** Accessible via the `/fr/` subdirectory.
-- **Clean UI:** Built with pure HTML5 and CSS3 (using CSS Variables and Flexbox/Grid).
-- **Privacy Policy:** Dedicated pages for legal compliance.
+---
 
-## 📂 Project Structure
-
-The project follows a simple directory structure to handle internationalization (i18n):
+## Structure du projet
 
 ```text
 /
-├── assets/              # Images, icons, favicons, and global resources
-├── fr/                  # 🇫🇷 French localized version
-│   ├── index.html       # 🇫🇷 French Homepage
-│   └── privacy.html     # 🇫🇷 French Privacy Policy
-├── index.html           # 🇬🇧 English Homepage (Main Entry)
-├── privacy.html         # 🇬🇧 English Privacy Policy
-└── README.md            # Project documentation
+├── .github/workflows/pages.yml  # Workflow CI/CD (validation puis déploiement manuel)
+├── assets/                      # Ressources officielles (logos, icônes, captures, manifest)
+├── docs/
+│   ├── ARCHITECTURE.md          # Architecture détaillée, guide pages/i18n, audit GA4, déploiement
+│   └── BACKLOG_WEB_B2B.md       # Backlog complet du chantier WEB-B2B (01 à 10)
+├── scripts/
+│   ├── check.mjs                # Build + vérifications automatisées (liens, SEO, HTML, manifest)
+│   └── dev.mjs                  # Mode dev (Eleventy --watch + serveur preview _site/)
+├── src/
+│   ├── _data/
+│   │   ├── i18n.js              # Libellés communs EN/FR
+│   │   ├── navigation.js        # Configuration centralisée & feature flags navigation
+│   │   ├── routes.js            # Correspondances d'URLs EN <-> FR
+│   │   └── site.js              # Métadonnées globales, GA4, URLs applicatives
+│   ├── _includes/
+│   │   ├── components/          # analytics.njk, footer.njk, head-seo.njk, header.njk
+│   │   └── layouts/             # base.njk, home.njk, legal.njk
+│   ├── assets/
+│   │   ├── scripts/main.js      # Menu mobile accessible (clavier + Escape)
+│   │   └── styles/main.css      # Design system mutualisé Halfy
+│   ├── pages/
+│   │   ├── en/                  # index.njk (/), privacy.njk (/privacy.html)
+│   │   └── fr/                  # index.njk (/fr/), privacy.njk (/fr/privacy.html)
+│   ├── robots.njk               # Génère _site/robots.txt
+│   └── sitemap.njk              # Génère _site/sitemap.xml depuis les routes actives
+├── AGENTS.md                    # Règles de contribution et garde-fous pour agents/développeurs
+├── CNAME                        # Domaine personnalisé GitHub Pages (halfy.app)
+├── eleventy.config.js           # Configuration Eleventy
+├── package.json
+├── package-lock.json
+└── server.js                    # Adaptateur Express dev/preview uniquement
 ```
 
-## 🛠 Technologies
-- HTML5
-- CSS3 (Custom styling, no external frameworks like Bootstrap)
-- Google Fonts (Inter)
-- GitHub Pages (Hosting)
+---
 
-## 🏃‍♂️ How to Run Locally
-Since this is a static website, you don't need any backend server or build process.
+## Commandes locales (Node.js 22+)
 
-1. Clone the repository:
-   
-```code Bash
-git clone https://github.com/Ker-IT/Halfy-Website.git
+```bash
+# Installer les dépendances de manière reproductible
+npm ci
+
+# Générer le site statique dans _site/
+npm run build
+
+# Lancer le mode développement (watch Eleventy + prévisualisation _site/ sur :3000)
+npm run dev
+
+# Construire puis prévisualiser _site/ sur http://localhost:3000
+npm run preview
+
+# Exécuter le build et toutes les vérifications (liens, assets, SEO, manifest, syntaxe JS)
+npm run check
 ```
-2. Open the site:
-    - Simply double-click on index.html.
-    - OR use a VS Code extension like Live Server (recommended for auto-refresh).
 
-## 📱 About Halfy
-Halfy offers the classic Halfway experience on Web and Android, plus Private Meet on the Web. Both experiences belong to the same Halfy product.
+---
 
-- **Publisher:** Kër IT
-- **Platforms:** Android (Google Play) & iOS (Coming soon)
+## Documentation complémentaire
 
-## 📄 License
-This project is proprietary to Kër IT.
-
-All rights reserved © 2026.
+- [Architecture, création de pages, audit Analytics & procédure GitHub Pages](docs/ARCHITECTURE.md)
+- [Backlog complet du chantier WEB-B2B](docs/BACKLOG_WEB_B2B.md)
+- [Consignes de développement et contraintes du dépôt](AGENTS.md)

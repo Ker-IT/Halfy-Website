@@ -1,0 +1,20 @@
+{
+  "name": "halfy-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "npx eleventy",
+    "preview": "npx eleventy && node server.js",
+    "check": "node scripts/check.mjs",
+    "start": "node server.js",
+    "lint": "node --check eleventy.config.js && node --check server.js && node --check scripts/dev.mjs && node --check scripts/check.mjs && node --check src/assets/scripts/main.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.8"
+  }
+}

@@ -1,0 +1,61 @@
+# Workflow GitHub Actions préparé pour Halfy-Website (WEB-B2B-01)
+# - Job `validate` : exécuté sur les push et pull requests pour vérifier le build Eleventy.
+# - Job `deploy` : séparation explicite entre validation et publication.
+#   Déclenchement manuel (`workflow_dispatch`) tant que les paramètres distants
+#   de GitHub Pages n'ont pas été explicitement basculés vers "GitHub Actions".
+
+name: Validate and Deploy Halfy Website
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and verify site
+        run: npm run check
+
+      - name: Upload _site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    if: github.event_name == 'workflow_dispatch'
+    needs: validate
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

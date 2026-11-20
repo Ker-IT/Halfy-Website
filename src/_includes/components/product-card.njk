@@ -1,0 +1,49 @@
+{% macro render(card) %}
+<article class="path-card {% if card.featured %}path-card--featured{% endif %}">
+  <div class="path-card-header">
+    {% if card.logoSrc %}
+    <img
+      src="{{ card.logoSrc }}"
+      alt="{{ card.logoAlt | default('') }}"
+      width="{{ card.logoWidth | default(38) }}"
+      height="{{ card.logoHeight | default(38) }}"
+      class="{{ card.logoClass | default('product-monogram') }}"
+      {% if not card.logoAlt %}aria-hidden="true"{% endif %}
+    />
+    {% elseif card.showMonogram %}
+    <img src="/assets/icon-192.png" alt="" width="38" height="38" class="product-monogram" aria-hidden="true" />
+    {% endif %}
+    <div>
+      <span class="path-label">{{ card.eyebrow }}</span>
+      {% if card.titleSuffix %}
+      <h3 class="product-title">{{ card.title }} <span class="product-byline">{{ card.titleSuffix }}</span></h3>
+      {% else %}
+      <h3 class="product-title">{{ card.title }}</h3>
+      {% endif %}
+    </div>
+  </div>
+
+  <p class="product-summary">{{ card.description }}</p>
+
+  {% if card.highlights and card.highlights.length > 0 %}
+  <ul class="product-highlights">
+    {% for point in card.highlights %}
+    <li>{{ point }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <div class="path-card-footer">
+    <a
+      href="{{ card.ctaHref }}"
+      class="{{ card.ctaClass }}"
+      {% if card.external %}target="_blank" rel="noopener noreferrer"{% endif %}
+    >
+      {{ card.ctaLabel }}
+    </a>
+    {% if card.availabilityNote %}
+    <p class="product-meta">{{ card.availabilityNote }}</p>
+    {% endif %}
+  </div>
+</article>
+{% endmacro %}

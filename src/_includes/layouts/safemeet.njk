@@ -1,0 +1,205 @@
+---
+layout: layouts/base.njk
+---
+{%- set currentLang = lang | default(site.defaultLang) -%}
+{%- set privacyUrl = routes.privacy[currentLang] -%}
+
+<!-- 1. HERO SAFEMEET -->
+<section class="hero hero--safemeet">
+  <div class="hero-container hero-container--safemeet">
+    <div class="hero-left">
+      <div class="safemeet-hero-brand">
+        <img
+          src="{{ hero.brandLogoSrc }}"
+          alt="{{ hero.brandLogoAlt }}"
+          width="{{ hero.brandLogoWidth | default(160) }}"
+          height="{{ hero.brandLogoHeight | default(92) }}"
+          class="safemeet-hero-lockup"
+        />
+        <span class="safemeet-hero-byline">{{ hero.brandByline }}</span>
+      </div>
+
+      <h1>{{ hero.titlePrefix }}<span>{{ hero.titleHighlight }}</span>{{ hero.titleSuffix }}</h1>
+      <p class="subtitle">{{ hero.subtitle }}</p>
+
+      <div class="cta-group">
+        <a href="{{ hero.primaryCta.href }}" class="btn-web" target="_blank" rel="noopener noreferrer">
+          {{ hero.primaryCta.label }}
+        </a>
+        <a href="{{ hero.secondaryCta.href }}" class="btn-secondary">
+          {{ hero.secondaryCta.label }}
+        </a>
+      </div>
+
+      {% if hero.note %}
+      <p class="hero-note">{{ hero.note }}</p>
+      {% endif %}
+    </div>
+
+    <div class="safemeet-diagram-wrap">
+      <div class="safemeet-diagram" role="region" aria-label="{{ hero.diagram.ariaLabel }}">
+        <div class="diagram-inputs">
+          <div class="diagram-node">
+            <span class="diagram-role">{{ hero.diagram.participantALabel }}</span>
+            <strong class="diagram-value">{{ hero.diagram.participantAInput }}</strong>
+            <span class="diagram-privacy">{{ hero.diagram.participantAPrivacy }}</span>
+          </div>
+
+          <div class="diagram-node">
+            <span class="diagram-role">{{ hero.diagram.participantBLabel }}</span>
+            <strong class="diagram-value">{{ hero.diagram.participantBInput }}</strong>
+            <span class="diagram-privacy">{{ hero.diagram.participantBPrivacy }}</span>
+          </div>
+        </div>
+
+        <div class="diagram-connector" aria-hidden="true">
+          <svg viewBox="0 0 320 56" width="320" height="56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M80 4 C80 28 160 20 160 44" stroke="#93c5fd" stroke-width="2" stroke-dasharray="4 4" />
+            <path d="M240 4 C240 28 160 20 160 44" stroke="#93c5fd" stroke-width="2" stroke-dasharray="4 4" />
+            <circle cx="80" cy="4" r="4" fill="#2563eb" />
+            <circle cx="240" cy="4" r="4" fill="#2563eb" />
+            <circle cx="160" cy="46" r="7" fill="#ef4444" />
+            <circle cx="160" cy="46" r="12" stroke="#ef4444" stroke-opacity="0.22" stroke-width="2" />
+          </svg>
+        </div>
+
+        <div class="diagram-output">
+          <span class="diagram-output-eyebrow">{{ hero.diagram.outputEyebrow }}</span>
+          <strong class="diagram-output-title">{{ hero.diagram.outputTitle }}</strong>
+          <p class="diagram-output-desc">{{ hero.diagram.outputDescription }}</p>
+        </div>
+
+        <p class="diagram-caption">{{ hero.diagram.caption }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. FONCTIONNEMENT EN 3 ÉTAPES -->
+<section id="how-it-works" class="paths-section">
+  <div class="section-container">
+    <div class="section-heading">
+      <p class="section-eyebrow">{{ howItWorks.eyebrow }}</p>
+      <h2>{{ howItWorks.heading }}</h2>
+      <p>{{ howItWorks.subheading }}</p>
+    </div>
+
+    <div class="steps-grid">
+      {% for step in howItWorks.steps %}
+      <article class="step-card">
+        <span class="step-number">{{ step.number }}</span>
+        <h3>{{ step.title }}</h3>
+        <p>{{ step.description }}</p>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- 3. CAS D'USAGE CONCRETS -->
+<section class="usecases-section section-surface-muted">
+  <div class="section-container">
+    <div class="section-heading">
+      <p class="section-eyebrow">{{ useCases.eyebrow }}</p>
+      <h2>{{ useCases.heading }}</h2>
+      <p>{{ useCases.subheading }}</p>
+    </div>
+
+    <div class="usecases-grid usecases-grid--flush">
+      {% for item in useCases.items %}
+      <article class="usecase-card">
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.description }}</p>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- 4. CONFIDENTIALITÉ ET TRANSPARENCE -->
+<section id="privacy" class="features-section">
+  <div class="section-container">
+    <div class="section-heading">
+      <p class="section-eyebrow">{{ privacySection.eyebrow }}</p>
+      <h2>{{ privacySection.heading }}</h2>
+      <p>{{ privacySection.subheading }}</p>
+    </div>
+
+    <div class="features features--3col">
+      {% for item in privacySection.items %}
+      <article class="feature-card">
+        <span class="feature-label">{{ item.label }}</span>
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.description }}</p>
+      </article>
+      {% endfor %}
+    </div>
+
+    <div class="privacy-summary-note">
+      <p>{{ privacySection.legalNote }}</p>
+      <a href="{{ privacyUrl }}" class="privacy-inline-link">{{ privacySection.legalLinkLabel }}</a>
+    </div>
+  </div>
+</section>
+
+<!-- 5. FAQ ACCESSIBLE -->
+<section id="faq" class="faq-section section-surface-muted">
+  <div class="section-container">
+    <div class="section-heading">
+      <p class="section-eyebrow">{{ faq.eyebrow }}</p>
+      <h2>{{ faq.heading }}</h2>
+      <p>{{ faq.subheading }}</p>
+    </div>
+
+    <div class="faq-list">
+      {% for item in faq.items %}
+      <details class="faq-item">
+        <summary class="faq-question">{{ item.question }}</summary>
+        <div class="faq-answer">
+          <p>{{ item.answer }}</p>
+        </div>
+      </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- 6. PASSERELLE SAFEMEET BUSINESS -->
+<section id="business" class="business-section" aria-labelledby="safemeet-business-heading">
+  <div class="business-container">
+    <div class="business-content">
+      <div class="business-lockup-row">
+        <img
+          src="{{ businessGateway.logoSrc }}"
+          alt="{{ businessGateway.logoAlt }}"
+          width="{{ businessGateway.logoWidth | default(140) }}"
+          height="{{ businessGateway.logoHeight | default(80) }}"
+          class="business-lockup-white"
+        />
+        <div class="business-lockup-meta">
+          <span class="business-eyebrow">{{ businessGateway.eyebrow }}</span>
+          <span class="business-status">{{ businessGateway.statusLabel }}</span>
+        </div>
+      </div>
+
+      <h2 id="safemeet-business-heading">{{ businessGateway.heading }}</h2>
+      <p class="business-lead">{{ businessGateway.lead }}</p>
+      <p class="business-note">{{ businessGateway.note }}</p>
+    </div>
+
+    <div class="business-panel">
+      <h3>{{ businessGateway.panelTitle }}</h3>
+      <ul class="business-list">
+        {% for item in businessGateway.points %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      <div class="business-actions">
+        <a href="{{ businessGateway.ctaHref }}" class="btn-business">
+          {{ businessGateway.ctaLabel }}
+        </a>
+        <p class="business-disclaimer">{{ businessGateway.disclaimer }}</p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,140 @@
+---
+layout: layouts/base.njk
+---
+{% import "components/product-hero.njk" as ProductHero %}
+{% import "components/benefit-card.njk" as BenefitCard %}
+{% import "components/cta-banner.njk" as CTABanner %}
+
+<!-- 1. HERO DÉDIÉ HALFWAY -->
+{{ ProductHero.render(hero) }}
+
+<!-- 2 & 4. FONCTIONNEMENT & ÉTAPES -->
+<section id="how-it-works" class="paths-section">
+  <div class="section-container">
+    <div class="section-heading">
+      <p class="section-eyebrow">{{ howItWorks.eyebrow }}</p>
+      <h2>{{ howItWorks.heading }}</h2>
+      <p>{{ howItWorks.subheading }}</p>
+    </div>
+
+    <div class="steps-grid">
+      {% for step in howItWorks.steps %}
+      <article class="step-card">
+        <span class="step-number">{{ step.number }}</span>
+        <h3>{{ step.title }}</h3>
+        <p>{{ step.description }}</p>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- 3. CAPTURE AUTHENTIQUE DÉTAIL LIEU (screen_2.png) -->
+<section class="showcase-section section-surface-muted">
+  <div class="showcase-container">
+    <div class="showcase-media">
+      <div class="phone-frame phone-frame--compact">
+        <div class="phone-screen">
+          <img src="{{ showcase.imageSrc }}" alt="{{ showcase.imageAlt }}" />
+        </div>
+      </div>
+    </div>
+
+    <div class="showcase-content">
+      <p class="section-eyebrow">{{ showcase.eyebrow }}</p>
+      <h2>{{ showcase.heading }}</h2>
+      <p class="showcase-lead">{{ showcase.lead }}</p>
+      <ul class="showcase-list">
+        {% for point in showcase.points %}
+        <li>{{ point }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 5. BÉNÉFICES UTILISATEURS -->
+<section class="features-section">
+  <div class="features-container">
+    <div class="features-title">
+      <p class="section-eyebrow">{{ benefits.eyebrow }}</p>
+      <h2>{{ benefits.heading }}</h2>
+      <p>{{ benefits.subheading }}</p>
+    </div>
+
+    <div class="features features--3col">
+      {% for item in benefits.items %}
+        {{ BenefitCard.render(item) }}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- 6 & 7. CAS D'USAGE CONCRETS & MODES DE DÉPLACEMENT RÉELS -->
+<section class="usecases-section section-surface-muted">
+  <div class="section-container">
+    <div class="section-heading">
+      <p class="section-eyebrow">{{ useCases.eyebrow }}</p>
+      <h2>{{ useCases.heading }}</h2>
+      <p>{{ useCases.subheading }}</p>
+    </div>
+
+    <div class="usecases-grid">
+      {% for item in useCases.items %}
+      <article class="usecase-card">
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.description }}</p>
+      </article>
+      {% endfor %}
+    </div>
+
+    <div class="transport-panel">
+      <div class="transport-header">
+        <span class="path-label">{{ transport.eyebrow }}</span>
+        <h3>{{ transport.heading }}</h3>
+      </div>
+      <div class="transport-body">
+        <p>{{ transport.description }}</p>
+        <p class="transport-note">{{ transport.limitationNote }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 & 9. CTA WEBAPP & GOOGLE PLAY -->
+{{ CTABanner.render(ctaBanner, site.apps) }}
+
+<!-- 10. PASSERELLE DISCRÈTE VERS SAFEMEET -->
+<section class="gateway-section">
+  <div class="section-container">
+    <div class="gateway-box">
+      <div class="gateway-lead">
+        {% if safemeetGateway.logoSrc %}
+        <img
+          src="{{ safemeetGateway.logoSrc }}"
+          alt=""
+          width="{{ safemeetGateway.logoWidth | default(48) }}"
+          height="{{ safemeetGateway.logoHeight | default(33) }}"
+          class="gateway-brand-mark"
+          aria-hidden="true"
+        />
+        {% endif %}
+        <div class="gateway-text">
+          <span class="path-label">{{ safemeetGateway.eyebrow }}</span>
+          <h2>{{ safemeetGateway.heading }}</h2>
+          <p>{{ safemeetGateway.description }}</p>
+        </div>
+      </div>
+      <div class="gateway-action">
+        <a href="{{ safemeetGateway.ctaHref }}" class="btn-secondary">
+          {{ safemeetGateway.ctaLabel }}
+        </a>
+        {% if safemeetGateway.secondaryHref %}
+        <a href="{{ safemeetGateway.secondaryHref }}" class="gateway-direct-link" target="_blank" rel="noopener noreferrer">
+          {{ safemeetGateway.secondaryLabel }}
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>

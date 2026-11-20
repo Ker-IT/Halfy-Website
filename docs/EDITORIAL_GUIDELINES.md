@@ -77,7 +77,8 @@ L'analyse des deux références communautaires Wikipédia met en évidence des m
 
 ## 5. Distinction B2C et B2B
 
-### Grand public (Halfway et SafeMeet by Halfy)
+### Grand public (Halfy et SafeMeet by Halfy)
+- Nomenclature obligatoire : **Halfy** est le nom de l'application (ne pas utiliser *Halfway* comme marque indépendante ; *halfway* reste uniquement un mot descriptif anglais). **SafeMeet** est le nom officiel de l'ancien *Private Meet* ; utiliser des CTA d'action (*Créer une rencontre* / *Create a meetup*) et jamais *Créer un SafeMeet* / *Create a SafeMeet*.
 - Partir de situations concrètes : retrouver un ami, choisir un restaurant ou un café entre deux adresses, acheter un objet d'occasion, organiser une remise en main propre, rencontrer une personne sans donner son adresse personnelle.
 - Expliquer simplement ce que fait l'outil et sur quelle plateforme il est accessible (Web, Android).
 
@@ -98,8 +99,8 @@ L'analyse des deux références communautaires Wikipédia met en évidence des m
 
 | Contexte | À éviter | Préférable |
 |---|---|---|
-| Accroche Halfway (FR) | *Réinventez la manière dont vous vous retrouvez.* | *Retrouvez-vous à mi-chemin.* |
-| Accroche Halfway (EN) | *Reimagine the way you connect.* | *Meet halfway.* |
+| Accroche Halfy (FR) | *Réinventez la manière dont vous vous retrouvez.* | *Retrouvez-vous à mi-chemin avec Halfy.* |
+| Accroche Halfy (EN) | *Reimagine the way you connect.* | *Meet halfway with Halfy.* |
 | Promesse SafeMeet (FR) | *La confiance et la sécurité au cœur de vos rencontres.* | *Organisez une rencontre sans partager votre adresse personnelle.* |
 | Promesse SafeMeet (EN) | *Empowering safer and more meaningful connections.* | *Arrange a meetup without sharing your home address.* |
 | Proposition B2B (FR) | *Transformez l'expérience utilisateur de votre marketplace grâce à une solution innovante.* | *Permettez aux acheteurs et aux vendeurs de choisir un lieu de remise en main propre.* |

@@ -2,19 +2,17 @@
   const toggleBtn = document.querySelector("[data-nav-toggle]");
   const drawer = document.querySelector("[data-mobile-drawer]");
 
-  if (!toggleBtn || !drawer) {
-    return;
-  }
-
-  const openLabel = toggleBtn.getAttribute("data-open-label") || "Open navigation menu";
-  const closeLabel = toggleBtn.getAttribute("data-close-label") || "Close navigation menu";
-
   function setMenuState(isOpen) {
+    if (!toggleBtn || !drawer) return;
+    const openLabel = toggleBtn.getAttribute("data-open-label") || "Open navigation menu";
+    const closeLabel = toggleBtn.getAttribute("data-close-label") || "Close navigation menu";
     toggleBtn.setAttribute("aria-expanded", String(isOpen));
     toggleBtn.setAttribute("aria-label", isOpen ? closeLabel : openLabel);
     drawer.hidden = !isOpen;
     drawer.classList.toggle("is-open", isOpen);
   }
+
+  if (!toggleBtn || !drawer) return;
 
   toggleBtn.addEventListener("click", function () {
     const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";

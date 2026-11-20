@@ -3,12 +3,29 @@
 {%- set homeUrl = routes.home[currentLang] -%}
 {%- set routeEntry = routes[routeKey] -%}
 {%- set switchLangUrl = routeEntry[t.otherLang] if routeEntry else routes.home[t.otherLang] -%}
-{%- set enabledNav = [] -%}
+
+{%- set enabledProducts = [] -%}
 {%- for item in navigation.products -%}
   {%- if item.enabled -%}
-    {%- set enabledNav = (enabledNav.push(item), enabledNav) -%}
+    {%- set enabledProducts = (enabledProducts.push(item), enabledProducts) -%}
   {%- endif -%}
 {%- endfor -%}
+
+{%- set enabledSections = [] -%}
+{%- for item in navigation.sections -%}
+  {%- if item.enabled -%}
+    {%- set enabledSections = (enabledSections.push(item), enabledSections) -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- set hasNav = (enabledProducts.length > 0) or (enabledSections.length > 0) -%}
+
+{%- set ctaKey = navigation.headerCtaByRouteKey[routeKey] or navigation.headerCtaDefault -%}
+{%- set activeHeaderCta = navigation.headerCtas[ctaKey] -%}
+{%- if not activeHeaderCta or not activeHeaderCta.enabled -%}
+  {%- set activeHeaderCta = navigation.headerCtas[navigation.headerCtaDefault] -%}
+{%- endif -%}
+{%- set activeHeaderCtaHref = activeHeaderCta.urls[currentLang] if activeHeaderCta.urls else activeHeaderCta.href -%}
 
 <header class="site-header">
   <div class="header-container">
@@ -16,12 +33,40 @@
       Halfy<span aria-hidden="true">.</span>
     </a>
 
-    {% if enabledNav.length > 0 %}
+    {% if hasNav %}
     <nav class="site-nav" aria-label="{{ t.primaryNavLabel }}">
       <ul class="nav-list">
-        {% for item in enabledNav %}
+        {% for item in enabledProducts %}
         {% set targetUrl = item.urls[currentLang] %}
-        <li>
+        <li class="nav-item">
+          <a
+            href="{{ targetUrl }}"
+            class="nav-product-link"
+            {% if not item.external and page.url == targetUrl %}aria-current="page"{% endif %}
+            {% if item.external %}target="_blank" rel="noopener noreferrer"{% endif %}
+          >
+            {% if item.logoSrc %}
+            <img
+              src="{{ item.logoSrc }}"
+              alt=""
+              width="{{ item.logoWidth }}"
+              height="{{ item.logoHeight }}"
+              class="{{ item.logoClass }}"
+              aria-hidden="true"
+            />
+            {% endif %}
+            <span class="nav-product-label">{{ item.labels[currentLang] }}</span>
+          </a>
+        </li>
+        {% endfor %}
+
+        {% if enabledProducts.length > 0 and enabledSections.length > 0 %}
+        <li class="nav-separator" aria-hidden="true"></li>
+        {% endif %}
+
+        {% for item in enabledSections %}
+        {% set targetUrl = item.urls[currentLang] %}
+        <li class="nav-item">
           <a
             href="{{ targetUrl }}"
             class="nav-link"
@@ -46,10 +91,14 @@
       >
         {{ t.switchLangShort }}
       </a>
-      <a href="{{ navigation.headerCta.href }}" class="btn-header btn-header-primary">
-        {{ navigation.headerCta.labels[currentLang] }}
+      <a
+        href="{{ activeHeaderCtaHref }}"
+        class="btn-header btn-header-primary"
+        {% if activeHeaderCta.external %}target="_blank" rel="noopener noreferrer"{% endif %}
+      >
+        {{ activeHeaderCta.labels[currentLang] }}
       </a>
-      {% if enabledNav.length > 0 %}
+      {% if hasNav %}
       <button
         type="button"
         class="nav-toggle"
@@ -70,11 +119,43 @@
     </div>
   </div>
 
-  {% if enabledNav.length > 0 %}
+  {% if hasNav %}
   <div id="mobile-navigation-drawer" class="mobile-drawer" data-mobile-drawer hidden>
     <nav aria-label="{{ t.primaryNavLabel }}">
+      {% if enabledProducts.length > 0 %}
       <ul class="mobile-nav-list">
-        {% for item in enabledNav %}
+        {% for item in enabledProducts %}
+        {% set targetUrl = item.urls[currentLang] %}
+        <li>
+          <a
+            href="{{ targetUrl }}"
+            class="mobile-product-link"
+            {% if not item.external and page.url == targetUrl %}aria-current="page"{% endif %}
+            {% if item.external %}target="_blank" rel="noopener noreferrer"{% endif %}
+          >
+            {% if item.logoSrc %}
+            <img
+              src="{{ item.logoSrc }}"
+              alt=""
+              width="{{ item.logoWidth }}"
+              height="{{ item.logoHeight }}"
+              class="{{ item.logoClass }}"
+              aria-hidden="true"
+            />
+            {% endif %}
+            <span class="mobile-product-text">
+              <strong>{{ item.labels[currentLang] }}</strong>
+              <small>{{ item.descriptions[currentLang] }}</small>
+            </span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if enabledSections.length > 0 %}
+      <ul class="mobile-nav-list mobile-nav-sections">
+        {% for item in enabledSections %}
         {% set targetUrl = item.urls[currentLang] %}
         <li>
           <a
@@ -87,12 +168,18 @@
           </a>
         </li>
         {% endfor %}
-        <li class="mobile-drawer-cta">
-          <a href="{{ navigation.headerCta.href }}" class="btn-header btn-header-primary">
-            {{ navigation.headerCta.labels[currentLang] }}
-          </a>
-        </li>
       </ul>
+      {% endif %}
+
+      <div class="mobile-drawer-cta">
+        <a
+          href="{{ activeHeaderCtaHref }}"
+          class="btn-header btn-header-primary"
+          {% if activeHeaderCta.external %}target="_blank" rel="noopener noreferrer"{% endif %}
+        >
+          {{ activeHeaderCta.labels[currentLang] }}
+        </a>
+      </div>
     </nav>
   </div>
   {% endif %}

@@ -3,11 +3,19 @@ export default {
   // Enable each entry ONLY once its destination is actually available.
   products: [
     {
-      key: "halfway",
+      key: "halfy",
       enabled: true,
       external: false,
-      urls: { en: "/halfway/", fr: "/fr/halfway/" },
-      labels: { en: "Halfway", fr: "Halfway" },
+      urls: { en: "/halfy/", fr: "/fr/halfy/" },
+      labels: { en: "Halfy", fr: "Halfy" },
+      descriptions: {
+        en: "Find a place to meet halfway.",
+        fr: "Trouvez où vous retrouver à mi-chemin.",
+      },
+      logoSrc: "/assets/icon-192.png",
+      logoWidth: 26,
+      logoHeight: 26,
+      logoClass: "nav-item-icon nav-item-icon--halfy",
     },
     {
       key: "safemeet",
@@ -15,7 +23,17 @@ export default {
       external: false,
       urls: { en: "/safemeet/", fr: "/fr/safemeet/" },
       labels: { en: "SafeMeet", fr: "SafeMeet" },
+      descriptions: {
+        en: "Meet without sharing your address.",
+        fr: "Rencontrez-vous sans partager votre adresse.",
+      },
+      logoSrc: "/assets/safemeet-logos/svg/logo-symbol.svg",
+      logoWidth: 35,
+      logoHeight: 24,
+      logoClass: "nav-item-icon",
     },
+  ],
+  sections: [
     {
       key: "business",
       enabled: false,
@@ -38,12 +56,47 @@ export default {
       labels: { en: "Pricing", fr: "Tarifs" },
     },
   ],
-  headerCta: {
-    href: "https://app.halfy.app/",
-    labels: {
-      en: "Open Halfy",
-      fr: "Ouvrir Halfy",
+  // Centralized contextual CTA configuration resolved from page routeKey.
+  headerCtaDefault: "halfy",
+  headerCtas: {
+    halfy: {
+      enabled: true,
+      href: "https://app.halfy.app/",
+      external: false,
+      labels: {
+        en: "Open Halfy",
+        fr: "Ouvrir Halfy",
+      },
     },
+    safemeet: {
+      enabled: true,
+      href: "https://app.halfy.app/meet",
+      external: false,
+      labels: {
+        en: "Create a meetup",
+        fr: "Créer une rencontre",
+      },
+    },
+    business: {
+      enabled: false,
+      urls: {
+        en: "/business/contact/",
+        fr: "/fr/business/contact/",
+      },
+      external: false,
+      labels: {
+        en: "Request a demo",
+        fr: "Demander une démo",
+      },
+    },
+  },
+  headerCtaByRouteKey: {
+    home: "halfy",
+    halfy: "halfy",
+    safemeet: "safemeet",
+    privacy: "halfy",
+    // Future mapping once /business/ routes are implemented:
+    // business: "business",
   },
   footer: {
     businessAnchor: {
@@ -74,15 +127,15 @@ export default {
     webApp: {
       href: "https://app.halfy.app/",
       labels: {
-        en: "Halfy WebApp",
-        fr: "WebApp Halfy",
+        en: "Open Halfy (WebApp)",
+        fr: "Ouvrir Halfy (WebApp)",
       },
     },
     safeMeetApp: {
       href: "https://app.halfy.app/meet",
       labels: {
-        en: "Create a SafeMeet",
-        fr: "Créer un SafeMeet",
+        en: "Create a meetup",
+        fr: "Créer une rencontre",
       },
     },
     androidApp: {

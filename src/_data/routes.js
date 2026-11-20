@@ -3,9 +3,9 @@ export default {
     en: "/",
     fr: "/fr/",
   },
-  halfway: {
-    en: "/halfway/",
-    fr: "/fr/halfway/",
+  halfy: {
+    en: "/halfy/",
+    fr: "/fr/halfy/",
   },
   safemeet: {
     en: "/safemeet/",

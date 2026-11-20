@@ -27,9 +27,9 @@
 | `assets/apple-touch-icon.png` | Icône Apple Touch (180×180) | Actif (`head-seo.njk`) |
 | `assets/web-app-manifest-192x192.png`, `assets/web-app-manifest-512x512.png` | Icônes PWA référencées par `site.webmanifest` | Actif (`site.webmanifest`) |
 | `assets/site.webmanifest` | Manifeste PWA (chemins corrigés en `/assets/...`) | Actif |
-| `assets/images/screen_1.png` | Capture écran principale affichée dans le Hero | Actif (`index.njk`, `halfway.njk`) |
-| `assets/images/screen_2.png` | Seconde capture écran officielle (détail d'un lieu) | Actif (`halfway.njk`) |
-| `assets/safemeet-logos/` | Kit officiel de logos SafeMeet (SVG, PNG web, OG 1200×630, exports mobiles) | Actif (`index.njk`, `halfway.njk`, `safemeet.njk`) — voir [`docs/BRAND_ASSETS.md`](BRAND_ASSETS.md) |
+| `assets/images/screen_1.png` | Capture écran principale affichée dans le Hero | Actif (`index.njk`, `halfy.njk`) |
+| `assets/images/screen_2.png` | Seconde capture écran officielle (détail d'un lieu) | Actif (`halfy.njk`) |
+| `assets/safemeet-logos/` | Kit officiel de logos SafeMeet (SVG, PNG web, OG 1200×630, exports mobiles) | Actif (`index.njk`, `halfy.njk`, `safemeet.njk`) — voir [`docs/BRAND_ASSETS.md`](BRAND_ASSETS.md) |
 | `assets/safemeet-logos-preview.png` | Planche d'aperçu visuelle du kit SafeMeet | Référence uniquement (ne pas afficher sur le site) |
 | `*_old.*`, `logo_old.png` | Anciennes variantes historiques (`favicon_old.*`, `favicon-96x96_old.png`, `apple-touch-icon_old.png`, `web-app-manifest-*_old.png`) | Conservé sans suppression (non référencé) |
 
@@ -80,6 +80,11 @@ description: "..."
 ### Étape 4 — Activer l'entrée de navigation (si applicable)
 Dans `src/_data/navigation.js`, passer `enabled: true` uniquement lorsque les deux versions (EN et FR) sont prêtes. Le sélecteur de langue, les balises `canonical`, `hreflang` (`en`, `fr`, `x-default`) et `sitemap.xml` sont alors générés automatiquement.
 
+### Navigation directe du header et CTA contextuels (`WEB-B2B-03.3`)
+- **Desktop :** `src/_includes/components/header.njk` affiche directement les entrées `navigation.products` actives (`Halfy` et `SafeMeet`) avec leurs icônes officielles, un séparateur vertical conditionnel (`.nav-separator`) avant `navigation.sections` (`Business`, désactivé tant que `/business/` n'existe pas), l'état actif `aria-current="page"` sur la route correspondante, le sélecteur de langue et le CTA principal.
+- **Mobile (`<= 980 px`) :** le tiroir `#mobile-navigation-drawer` reprend la même source de vérité `navigation.products` / `navigation.sections` sans regroupement imbriqué inutile, avec descriptions courtes et CTA contextuel.
+- **CTA contextuels centralisés :** `navigation.js` définit `headerCtaDefault`, `headerCtas` (`halfy`, `safemeet`, ainsi que `business` désactivé par défaut) et `headerCtaByRouteKey` (`home`/`halfy`/`privacy` -> `Open Halfy` / `Ouvrir Halfy` vers `https://app.halfy.app/` ; `safemeet` -> `Create a meetup` / `Créer une rencontre` vers `https://app.halfy.app/meet`). `header.njk` résout ce CTA en un point unique pour le desktop et le mobile.
+
 ### Étape 5 — Vérifier
 Exécuter `npm run check` et contrôler le rendu dans `_site/` aux résolutions 375 px, 768 px et 1440 px.
 
@@ -90,8 +95,11 @@ Exécuter `npm run check` et contrôler le rendu dans `_site/` aux résolutions 
 - **Intégration actuelle :** Google Analytics 4 (`G-YYH1720STZ`) est centralisé dans `src/_includes/components/analytics.njk` et inclus proprement dans `<head>` (correction du placement invalide qui existait sur `privacy.html` et `fr/privacy.html`).
 - **Points identifiés à traiter avant d'ajouter le tracking de conversion B2B (`WEB-B2B-07`) :**
   1. **Consentement (RGPD / ePrivacy) :** `gtag.js` est actuellement chargé et exécuté sans bannière de consentement préalable (`Consent Mode v2` / CMP). En Europe/France, le dépôt des cookies analytiques GA4 (`_ga`, `_ga_*`) sans consentement ou configuration strictement exemptée (ou alternative sans cookies) constitue un point de non-conformité à régulariser.
-  2. **Cohérence avec les mentions légales :** `/privacy.html` et `/fr/privacy.html` détaillent les données de localisation d'Halfway et de Private Meet mais **ne mentionnent pas Google Analytics / les cookies de mesure d'audience**, ni le traitement des futurs formulaires de contact B2B (`WEB-B2B-06`).
+  2. **Cohérence avec les mentions légales :** `/privacy.html` et `/fr/privacy.html` détaillent les données de localisation de la recherche à mi-chemin Halfy et de SafeMeet (anciennement *Private Meet*) mais **ne mentionnent pas Google Analytics / les cookies de mesure d'audience**, ni le traitement des futurs formulaires de contact B2B (`WEB-B2B-06`).
   3. **Action recommandée :** avant `WEB-B2B-06` et `WEB-B2B-07`, décider soit d'intégrer une gestion de consentement (Consent Mode v2), soit de basculer vers une mesure sans cookies respectueuse par défaut, et mettre à jour la politique de confidentialité avec validation juridique.
+
+### Redirections statiques de compatibilité
+- Les anciennes routes `/halfway/` (`src/pages/en/halfway.njk`) et `/fr/halfway/` (`src/pages/fr/halfway.njk`) sont générées avec `layouts/redirect.njk` (`noindex, follow`, `canonical` vers `/halfy/` et `/fr/halfy/`, balise `<meta http-equiv="refresh">`, repli JS et lien accessible). Elles sont exclues de `sitemap.xml` via `sitemapIgnore: true`.
 
 ---
 

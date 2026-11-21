@@ -9,7 +9,7 @@
     "preview": "npx eleventy && node server.js",
     "check": "node scripts/check.mjs",
     "start": "node server.js",
-    "lint": "node --check eleventy.config.js && node --check server.js && node --check scripts/dev.mjs && node --check scripts/check.mjs && node --check src/assets/scripts/main.js"
+    "lint": "node --check eleventy.config.js && node --check server.js && node --check scripts/dev.mjs && node --check scripts/check.mjs && node --check scripts/test-demo.mjs && node --check src/assets/scripts/main.js && node --check src/assets/scripts/business/demo-data.js && node --check src/assets/scripts/business/demo-simulation.js && node --check src/assets/scripts/business/demo-marketplace.js"
   },
   "dependencies": {
     "express": "^4.21.2"

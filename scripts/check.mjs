@@ -47,6 +47,11 @@ const requiredFiles = [
   "assets/safemeet-logos/svg/logo-lockup.svg",
   "assets/safemeet-logos/svg/logo-lockup-white.svg",
   "assets/safemeet-logos/web/og-image-1200x630.png",
+  "business/demo/index.html",
+  "fr/business/demo/index.html",
+  "assets/scripts/business/demo-data.js",
+  "assets/scripts/business/demo-simulation.js",
+  "assets/scripts/business/demo-marketplace.js",
 ];
 
 for (const relPath of requiredFiles) {
@@ -335,12 +340,103 @@ for (const pageFile of ["safemeet/index.html", "fr/safemeet/index.html"]) {
   assert(!html.includes("screen_1.png") && !html.includes("screen_2.png"), `${pageFile}: must not reuse Halfy screenshots`);
 }
 
-console.log("4. Checking JS syntax...");
+console.log("3b. Validating SafeMeet Business simulated demo pages (/business/demo/)...");
+const demoPages = [
+  {
+    file: "business/demo/index.html",
+    lang: "en",
+    expectedCanonical: "https://halfy.app/business/demo/",
+    switchTarget: "/fr/business/demo/",
+    expectedCtaLabel: "Business enquiries",
+    expectedCtaHrefPrefix: "mailto:contactus.kerit@gmail.com",
+    expectedDisclaimer:
+      "Interactive demo using fictional data. It shows an example of how SafeMeet could be integrated into a marketplace. Technical details remain to be confirmed.",
+  },
+  {
+    file: "fr/business/demo/index.html",
+    lang: "fr",
+    expectedCanonical: "https://halfy.app/fr/business/demo/",
+    switchTarget: "/business/demo/",
+    expectedCtaLabel: "Contact professionnel",
+    expectedCtaHrefPrefix: "mailto:contactus.kerit@gmail.com",
+    expectedDisclaimer:
+      "Démonstration interactive utilisant des données fictives. Elle présente un exemple d'intégration de SafeMeet dans une marketplace. Les modalités techniques restent à confirmer.",
+  },
+];
+
+for (const page of demoPages) {
+  const html = fs.readFileSync(path.join(siteDir, page.file), "utf8");
+  const normalizedHtml = html.replace(/&#39;/g, "'");
+  assert(html.startsWith("<!DOCTYPE html>"), `${page.file}: missing <!DOCTYPE html>`);
+  assert(html.includes(`<html lang="${page.lang}">`), `${page.file}: wrong html lang`);
+  assert(html.includes('<meta name="robots" content="noindex, follow" />'), `${page.file}: missing noindex, follow`);
+
+  // GA4 must NOT run on internal simulated demo pages
+  assert(!html.includes("G-YYH1720STZ"), `${page.file}: GA4 ID must be excluded from demo pages`);
+  assert(!html.includes("googletagmanager.com/gtag/js"), `${page.file}: GA4 script tag must be excluded from demo pages`);
+
+  assert(
+    html.includes(`<link rel="canonical" href="${page.expectedCanonical}" />`),
+    `${page.file}: wrong canonical`
+  );
+  assert(html.includes('hreflang="en"'), `${page.file}: missing hreflang="en"`);
+  assert(html.includes('hreflang="fr"'), `${page.file}: missing hreflang="fr"`);
+  assert(
+    html.includes(`href="${page.switchTarget}"`) && html.includes('class="lang-switch"'),
+    `${page.file}: wrong language switcher target (${page.switchTarget})`
+  );
+  assert(html.includes("/assets/safemeet-logos/svg/logo-lockup.svg"), `${page.file}: missing SafeMeet lockup`);
+  assert(
+    html.includes("/assets/scripts/business/demo-marketplace.js"),
+    `${page.file}: missing demo-marketplace.js module script`
+  );
+  assert(normalizedHtml.includes(page.expectedDisclaimer), `${page.file}: missing concise commercial transparency disclaimer`);
+  assert(!html.includes("—"), `${page.file}: contains forbidden em dash (—)`);
+  assert(!/\bWEB-B2B\b/i.test(normalizedHtml), `${page.file}: must not expose internal lot identifiers`);
+  assert(!/\bbacklog\b/i.test(normalizedHtml), `${page.file}: must not expose internal backlog wording`);
+  assert(!/\bPrivate\s+Meet\b/i.test(html), `${page.file}: contains legacy 'Private Meet'`);
+  assert(!html.includes("Halfway"), `${page.file}: contains 'Halfway' as capitalized brand`);
+  assert(
+    !/Leboncoin|Facebook Marketplace|Vinted|2ememain|2dehands/i.test(html),
+    `${page.file}: must not mention third-party marketplace brands`
+  );
+
+  const headerMatch = html.match(/<header class="site-header">[\s\S]*?<\/header>/);
+  const headerHtml = headerMatch ? headerMatch[0] : "";
+  assert(
+    !headerHtml.includes('href="/business/"') && !headerHtml.includes('href="/fr/business/"'),
+    `${page.file}: Business nav link must stay disabled in header`
+  );
+  assert(
+    !/Request a demo|Demander une démo/i.test(headerHtml),
+    `${page.file}: unavailable Business header CTA must not appear`
+  );
+
+  const demoCtaPattern = new RegExp(
+    `<a[^>]*href="${page.expectedCtaHrefPrefix}[^"]*"[^>]*class="btn-header btn-header-primary"[^>]*>\\s*${page.expectedCtaLabel}\\s*</a>`,
+    "g"
+  );
+  const demoCtaMatches = headerHtml.match(demoCtaPattern) || [];
+  assert(
+    demoCtaMatches.length === 2,
+    `${page.file}: expected contextual header CTA '${page.expectedCtaLabel}' -> '${page.expectedCtaHrefPrefix}' in both desktop and mobile header, found ${demoCtaMatches.length}`
+  );
+
+  const h1Matches = html.match(/<h1[\s>]/g) || [];
+  assert(h1Matches.length === 1, `${page.file}: expected 1 <h1>, found ${h1Matches.length}`);
+}
+
+console.log("4. Checking JS syntax and running demo simulation unit tests...");
 execSync("node --check eleventy.config.js", { cwd: rootDir, stdio: "inherit" });
 execSync("node --check server.js", { cwd: rootDir, stdio: "inherit" });
 execSync("node --check scripts/dev.mjs", { cwd: rootDir, stdio: "inherit" });
 execSync("node --check scripts/check.mjs", { cwd: rootDir, stdio: "inherit" });
+execSync("node --check scripts/test-demo.mjs", { cwd: rootDir, stdio: "inherit" });
 execSync("node --check src/assets/scripts/main.js", { cwd: rootDir, stdio: "inherit" });
+execSync("node --check src/assets/scripts/business/demo-data.js", { cwd: rootDir, stdio: "inherit" });
+execSync("node --check src/assets/scripts/business/demo-simulation.js", { cwd: rootDir, stdio: "inherit" });
+execSync("node --check src/assets/scripts/business/demo-marketplace.js", { cwd: rootDir, stdio: "inherit" });
+execSync("node --test scripts/test-demo.mjs", { cwd: rootDir, stdio: "inherit" });
 
 if (errors.length > 0) {
   console.error("\nVerification failed with errors:");
@@ -350,4 +446,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log("\nAll WEB-B2B-03.3 checks passed!");
+console.log("\nAll WEB-B2B-05.1.1 checks passed!");

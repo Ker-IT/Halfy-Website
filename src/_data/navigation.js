@@ -89,12 +89,25 @@ export default {
         fr: "Demander une démo",
       },
     },
+    businessDemo: {
+      enabled: true,
+      urls: {
+        en: "mailto:contactus.kerit@gmail.com?subject=SafeMeet%20Business%20-%20Business%20enquiries",
+        fr: "mailto:contactus.kerit@gmail.com?subject=SafeMeet%20Business%20-%20Contact%20professionnel",
+      },
+      external: false,
+      labels: {
+        en: "Business enquiries",
+        fr: "Contact professionnel",
+      },
+    },
   },
   headerCtaByRouteKey: {
     home: "halfy",
     halfy: "halfy",
     safemeet: "safemeet",
     privacy: "halfy",
+    businessDemo: "businessDemo",
     // Future mapping once /business/ routes are implemented:
     // business: "business",
   },

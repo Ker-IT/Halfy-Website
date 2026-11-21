@@ -1,0 +1,44 @@
+---
+layout: layouts/base.njk
+bodyClass: page-business-demo
+disableAnalytics: true
+extraModuleScripts:
+  - /assets/scripts/business/demo-marketplace.js
+---
+<section class="demo-hero">
+  <div class="demo-hero-container">
+    <div class="demo-brand-row">
+      <img
+        src="/assets/safemeet-logos/svg/logo-lockup.svg"
+        alt="SafeMeet"
+        width="140"
+        height="80"
+        class="demo-hero-lockup"
+      />
+      <span class="demo-business-pill">{{ intro.businessBadge }}</span>
+      <span class="demo-sim-pill">{{ intro.simulationBadge }}</span>
+    </div>
+
+    <h1>{{ intro.title }}</h1>
+    <p class="demo-hero-subtitle">{{ intro.subtitle }}</p>
+
+    <div class="demo-transparency-banner" role="note">
+      <p>{{ intro.disclaimer }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="demo-workspace-section">
+  <div
+    id="business-demo-root"
+    class="demo-workspace-container"
+    data-demo-lang="{{ lang }}"
+  >
+    <div class="demo-stage-column" data-demo-stage>
+      <noscript>
+        <p class="demo-noscript-note">{{ noscriptNotice }}</p>
+      </noscript>
+    </div>
+    <aside class="demo-panel-column" data-demo-panel aria-live="polite"></aside>
+  </div>
+</section>

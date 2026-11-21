@@ -15,4 +15,8 @@ export default {
     en: "/privacy.html",
     fr: "/fr/privacy.html",
   },
+  businessDemo: {
+    en: "/business/demo/",
+    fr: "/fr/business/demo/",
+  },
 };

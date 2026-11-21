@@ -18,5 +18,10 @@
   {% include "components/footer.njk" %}
 
   <script src="/assets/scripts/main.js" defer></script>
+  {% if extraModuleScripts %}
+    {% for scriptSrc in extraModuleScripts %}
+  <script type="module" src="{{ scriptSrc }}"></script>
+    {% endfor %}
+  {% endif %}
 </body>
 </html>

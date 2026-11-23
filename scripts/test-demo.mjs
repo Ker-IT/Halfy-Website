@@ -307,6 +307,11 @@ test("demo scripts perform no API/network calls, geolocation, storage persistenc
     false,
     "Step 6 must not render submitted origins"
   );
+  assert.match(
+    resultFnMatch[0],
+    /<div class="demo-outcome-card">[\s\S]*?<\/div>\s*<p class="demo-field-note demo-outcome-note" data-origin-removed>/,
+    "Step 6 must render the origin-removal note after, and outside, the proposed venue card"
+  );
 
   const marketplaceReturnMatch = rendererSrc.match(/\/\/ Step 7:[\s\S]*?\n\}/);
   assert.ok(marketplaceReturnMatch, "Step 7 renderer must exist");

@@ -57,7 +57,7 @@ disableAnalytics: true
     </div>
     <div class="business-usecase-grid">
       {% for item in useCases.items %}
-      <article class="business-usecase-card{% if loop.first %} business-usecase-card--primary{% endif %}"><h3>{{ item.title }}</h3><p>{{ item.description }}</p></article>
+      <article class="business-usecase-card"><h3>{{ item.title }}</h3><p>{{ item.description }}</p></article>
       {% endfor %}
     </div>
   </div>

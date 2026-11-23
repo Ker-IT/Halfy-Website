@@ -81,9 +81,16 @@ description: "..."
 Dans `src/_data/navigation.js`, passer `enabled: true` uniquement lorsque les deux versions (EN et FR) sont prêtes. Le sélecteur de langue, les balises `canonical`, `hreflang` (`en`, `fr`, `x-default`) et `sitemap.xml` sont alors générés automatiquement.
 
 ### Navigation directe du header et CTA contextuels (`WEB-B2B-03.3`)
-- **Desktop :** `src/_includes/components/header.njk` affiche directement les entrées `navigation.products` actives (`Halfy` et `SafeMeet`) avec leurs icônes officielles, un séparateur vertical conditionnel (`.nav-separator`) avant `navigation.sections` (`Business`, désactivé tant que `/business/` n'existe pas), l'état actif `aria-current="page"` sur la route correspondante, le sélecteur de langue et le CTA principal.
+- **Desktop :** `src/_includes/components/header.njk` affiche directement les entrées `navigation.products` actives (`Halfy` et `SafeMeet`) avec leurs icônes officielles, un séparateur vertical conditionnel (`.nav-separator`) avant `navigation.sections` (`Business`, actif vers `/business/` et `/fr/business/`), l'état actif `aria-current="page"` sur la route correspondante, le sélecteur de langue et le CTA principal.
 - **Mobile (`<= 980 px`) :** le tiroir `#mobile-navigation-drawer` reprend la même source de vérité `navigation.products` / `navigation.sections` sans regroupement imbriqué inutile, avec descriptions courtes et CTA contextuel.
-- **CTA contextuels centralisés :** `navigation.js` définit `headerCtaDefault`, `headerCtas` (`halfy`, `safemeet`, ainsi que `business` désactivé par défaut) et `headerCtaByRouteKey` (`home`/`halfy`/`privacy` -> `Open Halfy` / `Ouvrir Halfy` vers `https://app.halfy.app/` ; `safemeet` -> `Create a meetup` / `Créer une rencontre` vers `https://app.halfy.app/meet`). `header.njk` résout ce CTA en un point unique pour le desktop et le mobile.
+- **CTA contextuels centralisés :** `navigation.js` définit `headerCtaDefault`, `headerCtas` (`halfy`, `safemeet`, `business` et `businessDemo`) et `headerCtaByRouteKey`. Les pages Business et le démonstrateur proposent un contact professionnel par email en attendant `WEB-B2B-06`. `header.njk` résout ce CTA en un point unique pour le desktop et le mobile.
+
+### Architecture produit SafeMeet Business (`WEB-B2B-04`)
+
+- Halfy est l'application principale ; SafeMeet est l'un de ses modules et reste accessible directement aux particuliers.
+- SafeMeet Business permet aux entreprises d'intégrer SafeMeet dans leurs propres services au moyen de l'API B2B privée et d'une intégration accompagnée.
+- Les marketplaces sont le premier cas d'utilisation présenté. Elles ne constituent ni une marque ni une offre distincte.
+- Seules les routes `/business/` et `/fr/business/` sont publiques et indexables. Les routes marketplace envisagées restent reportées.
 
 ### Étape 5 — Vérifier
 Exécuter `npm run check` et contrôler le rendu dans `_site/` aux résolutions 375 px, 768 px et 1440 px.
@@ -92,10 +99,12 @@ Exécuter `npm run check` et contrôler le rendu dans `_site/` aux résolutions 
 
 ## 4. Audit Analytics (GA4) et confidentialité (prérequis avant WEB-B2B-07)
 
-- **Intégration actuelle :** Google Analytics 4 (`G-YYH1720STZ`) est centralisé dans `src/_includes/components/analytics.njk` et inclus proprement dans `<head>` (correction du placement invalide qui existait sur `privacy.html` et `fr/privacy.html`).
+- **Intégration actuelle :** Google Analytics 4 (`G-YYH1720STZ`) est centralisé dans `src/_includes/components/analytics.njk`. Le layout peut l’exclure avec `disableAnalytics: true`.
+- **Exclusions :** les pages SafeMeet Business `/business/` et `/fr/business/`, ainsi que les démonstrateurs `/business/demo/` et `/fr/business/demo/`, utilisent cette exclusion. Leur HTML généré ne contient ni chargement de `gtag.js`, ni appel `gtag('config', ...)`.
+- **Périmètre restant :** les autres pages publiques continuent à charger GA4. Ce comportement reste un sujet de conformité à traiter ; l’exclusion des quatre routes Business et démonstration ne constitue pas une conformité RGPD globale du site.
 - **Points identifiés à traiter avant d'ajouter le tracking de conversion B2B (`WEB-B2B-07`) :**
-  1. **Consentement (RGPD / ePrivacy) :** `gtag.js` est actuellement chargé et exécuté sans bannière de consentement préalable (`Consent Mode v2` / CMP). En Europe/France, le dépôt des cookies analytiques GA4 (`_ga`, `_ga_*`) sans consentement ou configuration strictement exemptée (ou alternative sans cookies) constitue un point de non-conformité à régulariser.
-  2. **Cohérence avec les mentions légales :** `/privacy.html` et `/fr/privacy.html` détaillent les données de localisation de la recherche à mi-chemin Halfy et de SafeMeet (anciennement *Private Meet*) mais **ne mentionnent pas Google Analytics / les cookies de mesure d'audience**, ni le traitement des futurs formulaires de contact B2B (`WEB-B2B-06`).
+  1. **Consentement (RGPD / ePrivacy) :** sur les autres pages publiques, `gtag.js` est chargé et exécuté sans bannière de consentement préalable (`Consent Mode v2` / CMP). En Europe/France, le dépôt des cookies analytiques GA4 (`_ga`, `_ga_*`) sans consentement ou configuration strictement exemptée (ou alternative sans cookies) constitue un point de non-conformité à régulariser.
+  2. **Cohérence avec les mentions légales :** `/privacy.html` et `/fr/privacy.html` détaillent les données de localisation de la recherche à mi-chemin Halfy et de SafeMeet mais **ne mentionnent pas Google Analytics / les cookies de mesure d'audience**, ni le traitement des futurs formulaires de contact B2B (`WEB-B2B-06`).
   3. **Action recommandée :** avant `WEB-B2B-06` et `WEB-B2B-07`, décider soit d'intégrer une gestion de consentement (Consent Mode v2), soit de basculer vers une mesure sans cookies respectueuse par défaut, et mettre à jour la politique de confidentialité avec validation juridique.
 
 ### Redirections statiques de compatibilité
@@ -105,21 +114,26 @@ Exécuter `npm run check` et contrôler le rendu dans `_site/` aux résolutions 
 
 ## 5. Génération et déploiement GitHub Pages
 
-### État actuel et limitation d'environnement
-- Le dépôt d'origine utilise un fichier `/CNAME` (`halfy.app`) pour GitHub Pages.
-- Depuis l'environnement Google AI Studio, le dépôt `.git` et les paramètres distants de GitHub Pages ne sont pas accessibles (impossible de vérifier si la source actuelle dans GitHub Settings est « Deploy from a branch: main / (root) » ou « GitHub Actions »).
+### État actuel
+- Le domaine personnalisé GitHub Pages est conservé par le fichier `/CNAME` (`halfy.app`), copié dans `_site/CNAME`.
+- La publication utilise le workflow `.github/workflows/pages.yml` et reste une action manuelle.
 
 ### Workflow préparé (`.github/workflows/pages.yml`)
-- **Job `validate`** (sur `push`/`pull_request` vers `main`) : exécute `npm ci` et `npm run check`, puis prépare l'artefact `_site`.
-- **Job `deploy`** : séparé explicitement et configuré sur `workflow_dispatch` tant que le basculement vers GitHub Actions n'est pas validé.
+- **Job `validate`** : sur `push` ou `pull_request` vers `main`, il exécute `npm ci` et `npm run check`, puis prépare l'artefact `_site`.
+- **Job `deploy`** : il s’exécute uniquement lorsque le workflow est lancé manuellement avec `workflow_dispatch`.
+- Un push sur `main` valide le site mais **ne le déploie pas**. Aucun déclenchement automatique de publication n’est configuré.
 
 ### Procédure de mise en production (à exécuter manuellement après validation)
-1. Valider localement (VS Code) : `npm ci && npm run check` et vérifier visuellement `_site/`.
+1. Valider localement : `npm ci`, `npm run check`, `npm run lint` et `git diff --check`, puis vérifier visuellement `_site/` lorsque les changements affectent le rendu.
 2. Fusionner les modifications vers la branche cible (`main`) après revue.
-3. Dans **GitHub → Settings → Pages**, vérifier ou passer la source sur **GitHub Actions** (requis pour publier `_site/` sans commiter le dossier de build dans `main`).
-4. Déclencher le workflow `Validate and Deploy Halfy Website` (`workflow_dispatch`) ou activer le déclencheur automatique sur `main` après premier succès.
+3. Dans GitHub Actions, ouvrir le workflow **Validate and Deploy Halfy Website**, choisir **Run workflow**, sélectionner la branche ou le tag validé et lancer manuellement `workflow_dispatch`.
+4. Attendre la réussite des jobs `validate` et `deploy`. Ne pas considérer le push sur `main` comme une publication.
 5. Vérifier en production : `https://halfy.app/`, `https://halfy.app/fr/`, `https://halfy.app/privacy.html`, `https://halfy.app/fr/privacy.html`, `https://halfy.app/sitemap.xml`, `https://halfy.app/robots.txt`, ainsi que le certificat HTTPS du domaine personnalisé.
 
 ### Procédure de retour arrière (Rollback)
-- **Si GitHub Pages utilise GitHub Actions :** relancer un déploiement depuis le dernier commit/tag valide sur `main`, ou effectuer un `git revert` du commit problématique puis redéclencher le workflow.
-- **Si l'on souhaite revenir temporairement au site statique brut sans build :** restaurer les 4 fichiers HTML d'origine à la racine depuis le commit précédent (`git checkout <commit_pre_web_b2b_01> -- index.html privacy.html fr/`) et remettre la source GitHub Pages sur `Deploy from a branch (main / root)`.
+1. Identifier le dernier commit ou tag dont l’artefact a été validé.
+2. Rendre cette révision sélectionnable par `workflow_dispatch` au moyen d’un tag ou d’une branche de rollback, ou effectuer un `git revert` du changement problématique sur `main` après revue.
+3. Lancer manuellement le workflow **Validate and Deploy Halfy Website** sur cette référence.
+4. Vérifier la réussite des jobs `validate` et `deploy`, puis contrôler les routes publiques, le `CNAME`, le sitemap et le certificat HTTPS.
+
+Cette procédure remplace le site publié par un nouvel artefact `_site` issu d’une révision connue. Elle ne nécessite pas de changer la source GitHub Pages ni de restaurer manuellement d’anciens fichiers HTML à la racine.

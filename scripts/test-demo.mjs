@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 import {
   DEMO_COPY,
   DEMO_STEPS,
+  DEMO_SUPPORTED_CATEGORIES,
   DEMO_TRANSPORTS,
   DEMO_VENUES,
 } from "../src/assets/scripts/business/demo-data.js";
@@ -24,21 +25,21 @@ test("initial state starts cleanly on step 1 as buyer with no selections", () =>
   assert.equal(state.step, 1);
   assert.equal(state.maxStepReached, 1);
   assert.equal(state.activeRole, "buyer");
-  assert.equal(state.invitationCreated, false);
+  assert.equal(state.roleLinksCreated, false);
   assert.equal(state.buyerTransport, null);
   assert.equal(state.sellerTransport, null);
   assert.equal(state.selectedVenueId, null);
   assert.equal(state.resultViewRole, "buyer");
-  assert.equal(state.meetupConfirmedSimulated, false);
+  assert.equal(state.proposalAcceptedSimulated, false);
   assert.equal(state.errorKey, null);
 });
 
 test("full 7-step flow transitions cleanly from chat to marketplace return", () => {
   const sim = createDemoSimulation("en");
 
-  assert.equal(sim.startInvitation().ok, true);
+  assert.equal(sim.createRoleLinks().ok, true);
   assert.equal(sim.getState().step, 2);
-  assert.equal(sim.getState().invitationCreated, true);
+  assert.equal(sim.getState().roleLinksCreated, true);
 
   assert.equal(sim.continueAsBuyer().ok, true);
   assert.equal(sim.getState().step, 3);
@@ -53,52 +54,59 @@ test("full 7-step flow transitions cleanly from chat to marketplace return", () 
   assert.equal(sim.advanceToPlaces().ok, true);
   assert.equal(sim.getState().step, 5);
 
-  assert.equal(sim.selectVenue("cafe-centre").ok, true);
+  assert.equal(sim.selectVenue("cafe-arcades").ok, true);
   assert.equal(sim.advanceToResult().ok, true);
   assert.equal(sim.getState().step, 6);
   assert.equal(sim.getState().resultViewRole, "buyer");
 
+  assert.equal(sim.acceptProposalSimulated().ok, false);
+  const missingAcceptance = sim.advanceToMarketplaceReturn();
+  assert.equal(missingAcceptance.ok, false);
+  assert.equal(missingAcceptance.errorKey, "missingAcceptance");
+
   assert.equal(sim.setResultViewRole("seller").ok, true);
   assert.equal(sim.getState().resultViewRole, "seller");
 
-  assert.equal(sim.confirmMeetupSimulated().ok, true);
-  assert.equal(sim.getState().meetupConfirmedSimulated, true);
+  assert.equal(sim.acceptProposalSimulated().ok, true);
+  assert.equal(sim.getState().proposalAcceptedSimulated, true);
 
   assert.equal(sim.advanceToMarketplaceReturn().ok, true);
   assert.equal(sim.getState().step, 7);
   assert.equal(sim.getState().maxStepReached, 7);
 });
 
-test("changing venue or transport after confirmation invalidates meetupConfirmedSimulated", () => {
+test("changing venue or transport after acceptance invalidates the simulated acceptance", () => {
   const sim = createDemoSimulation("fr");
-  sim.startInvitation();
+  sim.createRoleLinks();
   sim.continueAsBuyer();
   sim.setBuyerTransport("bike");
   sim.advanceToSeller();
   sim.setSellerTransport("walk");
   sim.advanceToPlaces();
-  sim.selectVenue("cafe-centre");
+  sim.selectVenue("cafe-arcades");
   sim.advanceToResult();
-  sim.confirmMeetupSimulated();
+  sim.setResultViewRole("seller");
+  sim.acceptProposalSimulated();
   sim.advanceToMarketplaceReturn();
 
-  assert.equal(sim.getState().meetupConfirmedSimulated, true);
+  assert.equal(sim.getState().proposalAcceptedSimulated, true);
   assert.equal(sim.getState().maxStepReached, 7);
 
-  // Going back to step 5 and switching venue invalidates prior confirmation & caps maxStepReached
+  // Going back to step 5 and switching venue invalidates prior acceptance and caps maxStepReached
   assert.equal(sim.goToStep(5).ok, true);
-  assert.equal(sim.selectVenue("place-centrale").ok, true);
-  assert.equal(sim.getState().meetupConfirmedSimulated, false);
+  assert.equal(sim.selectVenue("restaurant-passage").ok, true);
+  assert.equal(sim.getState().proposalAcceptedSimulated, false);
   assert.equal(sim.getState().maxStepReached, 5);
 
-  // Confirm again, then alter transport and verify confirmation invalidates
+  // Accept again, then alter transport and verify acceptance invalidates
   assert.equal(sim.advanceToResult().ok, true);
-  assert.equal(sim.confirmMeetupSimulated().ok, true);
-  assert.equal(sim.getState().meetupConfirmedSimulated, true);
+  assert.equal(sim.setResultViewRole("seller").ok, true);
+  assert.equal(sim.acceptProposalSimulated().ok, true);
+  assert.equal(sim.getState().proposalAcceptedSimulated, true);
 
   assert.equal(sim.goToStep(3).ok, true);
   assert.equal(sim.setBuyerTransport("car").ok, true);
-  assert.equal(sim.getState().meetupConfirmedSimulated, false);
+  assert.equal(sim.getState().proposalAcceptedSimulated, false);
 });
 
 test("invalid transitions and incomplete prerequisites are rejected", () => {
@@ -119,7 +127,7 @@ test("invalid transitions and incomplete prerequisites are rejected", () => {
   assert.equal(sim.continueAsBuyer().ok, false);
 
   // Move to step 3 and try advancing without transport
-  assert.equal(sim.startInvitation().ok, true);
+  assert.equal(sim.createRoleLinks().ok, true);
   assert.equal(sim.continueAsBuyer().ok, true);
   const missingBuyerMode = sim.advanceToSeller();
   assert.equal(missingBuyerMode.ok, false);
@@ -151,33 +159,34 @@ test("invalid transitions and incomplete prerequisites are rejected", () => {
   assert.equal(sim.goToStep(99).ok, false);
 });
 
-test("participant view separates buyer and seller starting locations", () => {
+test("participant result views omit submitted origins and expose proposal roles", () => {
   const sim = createDemoSimulation("fr");
-  sim.startInvitation();
+  sim.createRoleLinks();
   sim.continueAsBuyer();
   sim.setBuyerTransport("bike");
   sim.advanceToSeller();
   sim.setSellerTransport("car");
   sim.advanceToPlaces();
-  sim.selectVenue("place-centrale");
+  sim.selectVenue("restaurant-passage");
   sim.advanceToResult();
 
   const buyerView = sim.getParticipantViewData("buyer");
-  assert.equal(buyerView.ownOrigin, "Uccle, Bruxelles");
-  assert.equal(buyerView.otherOriginVisible, false);
-  assert.equal(buyerView.otherOrigin, null);
-  assert.equal(buyerView.venue.name, "Place Centrale");
+  assert.equal("ownOrigin" in buyerView, false);
+  assert.equal("otherOrigin" in buyerView, false);
+  assert.equal(buyerView.proposedByRole, "buyer");
+  assert.equal(buyerView.acceptedByRole, null);
+  assert.equal(buyerView.venue.name, "Restaurant du Passage");
 
   const sellerView = sim.getParticipantViewData("seller");
-  assert.equal(sellerView.ownOrigin, "Schaerbeek, Bruxelles");
-  assert.equal(sellerView.otherOriginVisible, false);
-  assert.equal(sellerView.otherOrigin, null);
-  assert.equal(sellerView.venue.name, "Place Centrale");
+  assert.equal("ownOrigin" in sellerView, false);
+  assert.equal("otherOrigin" in sellerView, false);
+  assert.equal(sellerView.proposedByRole, "buyer");
+  assert.equal(sellerView.venue.name, "Restaurant du Passage");
 });
 
 test("goBack, goToStep, and reset restore expected states", () => {
   const sim = createDemoSimulation("en");
-  sim.startInvitation();
+  sim.createRoleLinks();
   sim.continueAsBuyer();
   sim.setBuyerTransport("walk");
   sim.advanceToSeller();
@@ -194,11 +203,11 @@ test("goBack, goToStep, and reset restore expected states", () => {
   const resetState = sim.getState();
   assert.equal(resetState.step, 1);
   assert.equal(resetState.maxStepReached, 1);
-  assert.equal(resetState.invitationCreated, false);
+  assert.equal(resetState.roleLinksCreated, false);
   assert.equal(resetState.buyerTransport, null);
   assert.equal(resetState.sellerTransport, null);
   assert.equal(resetState.selectedVenueId, null);
-  assert.equal(resetState.meetupConfirmedSimulated, false);
+  assert.equal(resetState.proposalAcceptedSimulated, false);
 });
 
 test("data covers all 7 steps, simplified panel, header contexts, transports, and venues in both EN and FR", () => {
@@ -218,8 +227,26 @@ test("data covers all 7 steps, simplified panel, header contexts, transports, an
     }
     for (const venue of DEMO_VENUES) {
       assert.ok(copy.marketplace.venues[venue.id], `Missing venue ${venue.id} in ${lang}`);
+      assert.ok(
+        DEMO_SUPPORTED_CATEGORIES.includes(venue.category),
+        `Unsupported venue category ${venue.category}`
+      );
+      assert.ok(copy.marketplace.venues[venue.id].categoryLabel);
     }
   }
+});
+
+test("copy exposes two simulated role links without individual progress claims", () => {
+  for (const lang of ["fr", "en"]) {
+    const copy = DEMO_COPY[lang];
+    assert.ok(copy.ui.step2.buyerLinkLabel);
+    assert.ok(copy.ui.step2.sellerLinkLabel);
+    assert.match(copy.ui.step2.simulatedLinkText, /simul/i);
+  }
+
+  const serialisedCopy = JSON.stringify(DEMO_COPY);
+  assert.equal(/L'acheteur a renseigné|buyer has entered|buyer has completed/i.test(serialisedCopy), false);
+  assert.equal(/s'engage plus facilement|engage more easily/i.test(serialisedCopy), false);
 });
 
 test("demo scripts perform no API/network calls, geolocation, storage persistence, internal refs, or Step 5 origin leaks", () => {
@@ -264,4 +291,42 @@ test("demo scripts perform no API/network calls, geolocation, storage persistenc
     false,
     "Step 5 schematic map must never display participant origin districts"
   );
+
+  assert.equal(
+    (rendererSrc.match(/data-role-start-link=/g) || []).length,
+    2,
+    "Step 2 must render separate buyer and seller start links"
+  );
+
+  const resultFnMatch = rendererSrc.match(
+    /if \(state\.step === 6\) \{\s*const viewRole[\s\S]*?\/\/ Step 7:/
+  );
+  assert.ok(resultFnMatch, "Step 6 renderer must exist");
+  assert.equal(
+    /buyerLocation|sellerLocation|viewData\.ownOrigin|viewData\.otherOrigin/i.test(resultFnMatch[0]),
+    false,
+    "Step 6 must not render submitted origins"
+  );
+
+  const marketplaceReturnMatch = rendererSrc.match(/\/\/ Step 7:[\s\S]*?\n\}/);
+  assert.ok(marketplaceReturnMatch, "Step 7 renderer must exist");
+  assert.equal(
+    /selectedVenue|\.venues\[|categoryLabel/i.test(marketplaceReturnMatch[0]),
+    false,
+    "Step 7 marketplace return must not render the accepted POI"
+  );
+});
+
+test("demo pages remain noindex and keep analytics disabled", () => {
+  for (const lang of ["en", "fr"]) {
+    const pagePath = path.join(rootDir, "src/pages", lang, "business/demo.njk");
+    const pageSource = fs.readFileSync(pagePath, "utf8");
+    assert.match(pageSource, /robots:\s*["']noindex, follow["']/);
+  }
+
+  const layoutSource = fs.readFileSync(
+    path.join(rootDir, "src/_includes/layouts/business-demo.njk"),
+    "utf8"
+  );
+  assert.match(layoutSource, /disableAnalytics:\s*true/);
 });

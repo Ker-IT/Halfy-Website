@@ -4,19 +4,31 @@ export const DEMO_ROLES = ["buyer", "seller"];
 
 export const DEMO_TRANSPORTS = ["car", "walk", "bike"];
 
+export const DEMO_SUPPORTED_CATEGORIES = [
+  "bar",
+  "cafe",
+  "restaurant",
+  "cinema",
+  "museum",
+  "florist",
+];
+
 export const DEMO_VENUES = [
   {
-    id: "cafe-centre",
+    id: "cafe-arcades",
+    category: "cafe",
     mapX: 162,
     mapY: 118,
   },
   {
-    id: "place-centrale",
+    id: "restaurant-passage",
+    category: "restaurant",
     mapX: 256,
     mapY: 160,
   },
   {
-    id: "entree-parc",
+    id: "musee-objets",
+    category: "museum",
     mapX: 336,
     mapY: 96,
   },
@@ -58,20 +70,20 @@ export const DEMO_COPY = {
         bike: { label: "Vélo" },
       },
       venues: {
-        "cafe-centre": {
-          name: "Café du Centre",
-          area: "Quartier central",
-          summary: "Lieu public fréquenté en journée.",
+        "cafe-arcades": {
+          name: "Café des Arcades",
+          categoryLabel: "Café",
+          summary: "Établissement fictif.",
         },
-        "place-centrale": {
-          name: "Place Centrale",
-          area: "Esplanade piétonne",
-          summary: "Espace ouvert facile à repérer.",
+        "restaurant-passage": {
+          name: "Restaurant du Passage",
+          categoryLabel: "Restaurant",
+          summary: "Établissement fictif.",
         },
-        "entree-parc": {
-          name: "Entrée du parc",
-          area: "Accès principal",
-          summary: "Point de rendez-vous dégagé pour remettre un vélo.",
+        "musee-objets": {
+          name: "Musée des Objets",
+          categoryLabel: "Musée",
+          summary: "Établissement fictif.",
         },
       },
     },
@@ -81,7 +93,7 @@ export const DEMO_COPY = {
       stepOf: "sur",
       stepTitles: [
         "Messagerie",
-        "Invitation",
+        "Liens",
         "Acheteur",
         "Vendeur",
         "Lieux",
@@ -90,7 +102,7 @@ export const DEMO_COPY = {
       ],
       headerContexts: {
         1: "Annonce et messagerie",
-        2: "Invitation SafeMeet",
+        2: "Liens de démarrage SafeMeet",
         5: "Zone de rencontre",
         7: "Conversation mise à jour",
       },
@@ -106,9 +118,13 @@ export const DEMO_COPY = {
         cta: "Organiser avec SafeMeet",
       },
       step2: {
-        heading: "Invitation prête pour la rencontre",
+        heading: "Deux liens de démarrage distincts",
         listingLine: "Vélo de ville d'occasion · 250 €",
-        note: "La marketplace ouvre un parcours dédié entre l'acheteur et le vendeur. Dans cette démonstration simulée, aucune invitation réelle n'est envoyée.",
+        buyerLinkLabel: "Lien acheteur",
+        sellerLinkLabel: "Lien vendeur",
+        simulatedLinkText: "Lien simulé, non opérationnel",
+        deliveryNote: "La marketplace remet séparément le bon lien à chaque participant. Aucun token, lien réel ou secret n'est créé dans cette démonstration.",
+        platformNote: "Le parcours est disponible sur le Web et dans l'application Android. La validation E2E de la version B2B est encore en cours.",
         cta: "Poursuivre en tant qu'acheteur",
       },
       step3: {
@@ -121,8 +137,8 @@ export const DEMO_COPY = {
       },
       step4: {
         heading: "D'où partez-vous ?",
-        buyerDoneTitle: "L'acheteur a renseigné son point de départ.",
-        buyerDoneNote: "Son adresse reste confidentielle et n'apparaît pas ici.",
+        separateFlowTitle: "Chaque participant remplit cette étape séparément.",
+        separateFlowNote: "SafeMeet ne montre pas au vendeur si l'acheteur a terminé individuellement.",
         locationLabel: "Votre point de départ (fictif)",
         transportHeading: "Comment vous déplacez-vous ?",
         staticNote: "Démonstration statique : les données sont fictives et les modes de déplacement n'influencent pas les résultats simulés.",
@@ -130,40 +146,39 @@ export const DEMO_COPY = {
         cta: "Voir les lieux proposés",
       },
       step5: {
-        heading: "Choisissez un lieu de rencontre",
-        lead: "Sélectionnez l'un des trois lieux publics situés dans une zone équilibrée pour les deux participants.",
-        mapAriaLabel: "Carte urbaine illustrative présentant trois lieux publics dans une zone commune",
-        mapSharedZoneLabel: "Zone commune",
-        transportNotice: "Les modes de déplacement n'influencent pas cette liste simulée. Carte illustrative locale sans service cartographique externe.",
-        cta: "Voir le résultat partagé",
+        heading: "Proposez un lieu de rencontre",
+        lead: "Ces établissements fictifs sont classés pour mieux équilibrer les temps de trajet des deux participants, sans garantir un mi-chemin exact ni une accessibilité identique.",
+        mapAriaLabel: "Carte urbaine schématique présentant trois établissements fictifs classés",
+        mapSharedZoneLabel: "Carte fictive",
+        transportNotice: "Illustration locale : aucun itinéraire, temps de trajet ou service cartographique externe n'est utilisé dans cette simulation.",
+        cta: "Proposer ce lieu",
       },
       step6: {
-        heading: "Ce que voit chaque participant",
+        heading: "Proposition et acceptation",
         toggleLabel: "Basculer de vue :",
         buyerViewBtn: "Vue acheteur",
         sellerViewBtn: "Vue vendeur",
-        selectedVenueLabel: "Lieu de rencontre choisi",
-        ownOriginLabel: "Votre point de départ",
-        otherOriginLabel: "Point de départ de l'autre participant",
-        otherOriginHidden: "Non communiqué",
-        confirmHeading: "Confirmation mutuelle (simulée)",
-        confirmPending: "En attente de confirmation (simulé)",
-        confirmDone: "Rencontre confirmée (simulé)",
-        confirmBtn: "Simuler la confirmation",
-        confirmedBtn: "Confirmation simulée enregistrée",
+        proposedVenueLabel: "Lieu proposé par l'acheteur",
+        originsRemovedNote: "Les points de départ ne sont plus affichés après leur soumission.",
+        negotiationHeading: "État de la proposition",
+        proposalSent: "Proposition envoyée par l'acheteur",
+        proposalReceived: "Proposition reçue du côté vendeur",
+        proposalAccepted: "Proposition acceptée par le vendeur",
+        switchToSellerBtn: "Passer à la vue vendeur",
+        acceptBtn: "Accepter la proposition",
+        acceptedBtn: "Proposition acceptée",
         cta: "Revenir à la marketplace",
       },
       step7: {
         heading: "Retour sur Market Demo",
-        summaryHeading: "Lieu de rencontre proposé via SafeMeet",
-        summaryStatusConfirmed: "Rencontre confirmée (simulé)",
-        summaryStatusPending: "Lieu proposé, en attente de confirmation (simulé)",
-        summaryNote: "Aucun point de départ n'apparaît dans la messagerie. Ce retour dans la conversation est simulé ; les modalités d'intégration restent à confirmer.",
+        summaryHeading: "État SafeMeet",
+        summaryStatusAccepted: "Lieu accepté dans SafeMeet",
+        summaryNote: "Simulation illustrative : la marketplace ne reçoit ici qu'un statut non géographique. Aucun nom de lieu, adresse ou point de départ n'est retourné, et aucun appel API, webhook, callback ou notification automatique n'est effectué.",
         conclusionTitle: "L'essentiel pour votre marketplace",
         takeaways: [
           "Les acheteurs et vendeurs organisent leur remise en main propre.",
-          "Ils n'ont pas besoin d'échanger leur adresse personnelle dans le chat.",
-          "Ils disposent d'une proposition de lieu public commun.",
+          "Ils n'ont pas besoin d'échanger leur point de départ dans le chat.",
+          "Ils proposent puis acceptent un lieu public dans SafeMeet.",
         ],
         contactCta: "Parlons de votre intégration",
         contactHref:
@@ -175,6 +190,7 @@ export const DEMO_COPY = {
         missingBuyerTransport: "Choisissez un mode de déplacement pour l'acheteur.",
         missingSellerTransport: "Choisissez un mode de déplacement pour le vendeur.",
         missingVenue: "Sélectionnez l'un des trois lieux proposés pour continuer.",
+        missingAcceptance: "Le vendeur doit accepter la proposition avant le retour à la marketplace.",
         invalidStep: "Complétez d'abord les étapes précédentes.",
       },
     },
@@ -187,12 +203,12 @@ export const DEMO_COPY = {
           explanation:
             "Au moment de fixer le rendez-vous, l'acheteur clique sur « Organiser avec SafeMeet » directement depuis la conversation.",
           forMarketplace:
-            "Vous proposez une alternative simple au partage d'adresses personnelles par message, au moment précis où la remise en main propre se décide.",
+            "Votre serveur crée la rencontre via une API B2B privée, dans le cadre d'une intégration partenaire accompagnée.",
         },
         2: {
-          title: "Ouvrir un espace de rencontre dédié",
+          title: "Remettre un lien propre à chaque rôle",
           explanation:
-            "Le participant quitte la négociation libre pour entrer dans un parcours guidé associé à son achat.",
+            "La marketplace reçoit un lien acheteur et un lien vendeur distincts, puis remet chacun séparément.",
           forMarketplace:
             "Le parcours reste centré sur la transaction sans demander aux utilisateurs de créer un nouveau compte externe.",
         },
@@ -201,35 +217,35 @@ export const DEMO_COPY = {
           explanation:
             "L'acheteur confirme d'où il part et son mode de déplacement, sans que ces informations soient visibles par le vendeur.",
           forMarketplace:
-            "L'acheteur s'engage plus facilement sur une remise en main propre lorsqu'il n'a pas à divulguer son quartier dès le premier échange.",
+            "L'acheteur peut poursuivre sans transmettre son point de départ au vendeur.",
         },
         4: {
           title: "Recueillir celui du vendeur séparément",
           explanation:
-            "Le vendeur voit uniquement que l'acheteur a rempli sa part, puis indique son propre point de départ.",
+            "Le vendeur indique son propre point de départ et son mode, sans indicateur détaillé sur la progression de l'acheteur.",
           forMarketplace:
             "Les deux participants renseignent leur point de départ séparément, sans avoir à se faire confiance sur leur adresse.",
         },
         5: {
-          title: "Suggérer des lieux publics intermédiaires",
+          title: "Classer des lieux publics compatibles",
           explanation:
-            "Trois lieux publics situés à mi-chemin sont affichés sans montrer d'où vient l'autre personne.",
+            "SafeMeet classe des lieux publics pour mieux équilibrer les temps de trajet, sans promettre un mi-chemin exact.",
           forMarketplace:
             "Vos utilisateurs passent directement à un choix concret de lieu public plutôt que de négocier un quartier pendant plusieurs messages.",
         },
         6: {
-          title: "Afficher le lieu commun sans exposer les départs",
+          title: "Proposer puis accepter un lieu",
           explanation:
-            "Chaque participant retrouve uniquement le lieu retenu et son propre départ, puis peut simuler la confirmation.",
+            "L'acheteur propose un lieu et le vendeur l'accepte. Aucun point de départ n'est réaffiché.",
           forMarketplace:
             "Chacun repart avec la même information de rendez-vous claire tout en gardant son point de départ privé.",
         },
         7: {
-          title: "Retrouver le rendez-vous dans la conversation",
+          title: "Lire un statut non géographique",
           explanation:
-            "Le lieu choisi s'affiche dans la messagerie Market Demo comme rappel de la remise en main propre.",
+            "La marketplace peut lire un état accepté, sans recevoir le nom ni l'adresse du lieu.",
           forMarketplace:
-            "La transaction se conclut dans votre environnement habituel, avec un lieu public prêt pour le jour du rendez-vous.",
+            "Cette vue illustre un retour de statut uniquement ; elle ne clôt pas la transaction et ne simule aucune notification automatique.",
         },
       },
     },
@@ -269,20 +285,20 @@ export const DEMO_COPY = {
         bike: { label: "Bike" },
       },
       venues: {
-        "cafe-centre": {
-          name: "Café du Centre",
-          area: "Central neighbourhood",
-          summary: "Busy public café during the day.",
+        "cafe-arcades": {
+          name: "Arcades Café",
+          categoryLabel: "Café",
+          summary: "Fictional establishment.",
         },
-        "place-centrale": {
-          name: "Place Centrale",
-          area: "Pedestrian square",
-          summary: "Open public square that is easy to spot.",
+        "restaurant-passage": {
+          name: "Passage Restaurant",
+          categoryLabel: "Restaurant",
+          summary: "Fictional establishment.",
         },
-        "entree-parc": {
-          name: "Park Entrance",
-          area: "Main gate",
-          summary: "Spacious spot suited to handing over a bicycle.",
+        "musee-objets": {
+          name: "Museum of Objects",
+          categoryLabel: "Museum",
+          summary: "Fictional establishment.",
         },
       },
     },
@@ -292,7 +308,7 @@ export const DEMO_COPY = {
       stepOf: "of",
       stepTitles: [
         "Chat",
-        "Invite",
+        "Links",
         "Buyer",
         "Seller",
         "Places",
@@ -301,7 +317,7 @@ export const DEMO_COPY = {
       ],
       headerContexts: {
         1: "Listing and chat",
-        2: "SafeMeet invitation",
+        2: "SafeMeet start links",
         5: "Shared area",
         7: "Updated chat",
       },
@@ -317,9 +333,13 @@ export const DEMO_COPY = {
         cta: "Arrange with SafeMeet",
       },
       step2: {
-        heading: "Meetup link ready",
+        heading: "Two separate start links",
         listingLine: "Used city bike · €250",
-        note: "The marketplace opens a dedicated flow between buyer and seller. In this simulated demo, no real invitation is created or sent.",
+        buyerLinkLabel: "Buyer link",
+        sellerLinkLabel: "Seller link",
+        simulatedLinkText: "Simulated link, not operational",
+        deliveryNote: "The marketplace gives each participant their role-specific link separately. This demo creates no real token, link or secret.",
+        platformNote: "The flow is available on the Web and in the Android app. End-to-end validation of the B2B version is still in progress.",
         cta: "Continue as buyer",
       },
       step3: {
@@ -332,8 +352,8 @@ export const DEMO_COPY = {
       },
       step4: {
         heading: "Where are you starting from?",
-        buyerDoneTitle: "The buyer has entered their starting point.",
-        buyerDoneNote: "Their address stays private and is not shown here.",
+        separateFlowTitle: "Each participant completes this step separately.",
+        separateFlowNote: "SafeMeet does not tell the seller whether the buyer has individually completed their step.",
         locationLabel: "Your starting point (fictional)",
         transportHeading: "How are you travelling?",
         staticNote: "Static demo: all data is fictional and travel modes do not alter the simulated results.",
@@ -341,40 +361,39 @@ export const DEMO_COPY = {
         cta: "See suggested places",
       },
       step5: {
-        heading: "Choose a meeting place",
-        lead: "Select one of the three public places in a balanced area for both participants.",
-        mapAriaLabel: "Illustrative city map showing three public places in a shared area",
-        mapSharedZoneLabel: "Shared area",
-        transportNotice: "Travel modes do not alter this simulated list. Local schematic map with no external mapping service.",
-        cta: "View participant outcome",
+        heading: "Propose a meeting place",
+        lead: "These fictional establishments are ranked to better balance both participants' journey times, without guaranteeing an exact halfway point or equal access.",
+        mapAriaLabel: "Schematic city map showing three ranked fictional establishments",
+        mapSharedZoneLabel: "Fictional map",
+        transportNotice: "Local illustration: this simulation uses no routes, journey times or external mapping service.",
+        cta: "Propose this place",
       },
       step6: {
-        heading: "What each participant sees",
+        heading: "Proposal and acceptance",
         toggleLabel: "Switch view:",
         buyerViewBtn: "Buyer view",
         sellerViewBtn: "Seller view",
-        selectedVenueLabel: "Selected meeting place",
-        ownOriginLabel: "Your starting point",
-        otherOriginLabel: "Other participant's starting point",
-        otherOriginHidden: "Not shared",
-        confirmHeading: "Mutual confirmation (simulated)",
-        confirmPending: "Awaiting confirmation (simulated)",
-        confirmDone: "Meetup confirmed (simulated)",
-        confirmBtn: "Simulate confirmation",
-        confirmedBtn: "Simulated confirmation recorded",
+        proposedVenueLabel: "Place proposed by the buyer",
+        originsRemovedNote: "Starting points are no longer displayed after submission.",
+        negotiationHeading: "Proposal status",
+        proposalSent: "Proposal sent by the buyer",
+        proposalReceived: "Proposal received by the seller",
+        proposalAccepted: "Proposal accepted by the seller",
+        switchToSellerBtn: "Switch to seller view",
+        acceptBtn: "Accept proposal",
+        acceptedBtn: "Proposal accepted",
         cta: "Return to marketplace",
       },
       step7: {
         heading: "Back on Market Demo",
-        summaryHeading: "Meeting place suggested via SafeMeet",
-        summaryStatusConfirmed: "Meetup confirmed (simulated)",
-        summaryStatusPending: "Place suggested, awaiting confirmation (simulated)",
-        summaryNote: "No starting points appear in the chat. This return message is simulated; technical integration details remain to be confirmed.",
+        summaryHeading: "SafeMeet status",
+        summaryStatusAccepted: "Place accepted in SafeMeet",
+        summaryNote: "Illustrative simulation: the marketplace receives only a non-geographic status here. No place name, address or starting point is returned, and no API call, webhook, callback or automatic notification is made.",
         conclusionTitle: "Key takeaways for your marketplace",
         takeaways: [
           "Buyers and sellers arrange an in-person handoff.",
-          "They do not need to share their home addresses in chat.",
-          "They agree on one shared public place.",
+          "They do not need to share their starting points in chat.",
+          "They propose and accept a public place in SafeMeet.",
         ],
         contactCta: "Discuss your integration",
         contactHref:
@@ -386,6 +405,7 @@ export const DEMO_COPY = {
         missingBuyerTransport: "Choose a travel mode for the buyer.",
         missingSellerTransport: "Choose a travel mode for the seller.",
         missingVenue: "Select one of the three places to continue.",
+        missingAcceptance: "The seller must accept the proposal before returning to the marketplace.",
         invalidStep: "Complete the previous steps first.",
       },
     },
@@ -398,12 +418,12 @@ export const DEMO_COPY = {
           explanation:
             "When it is time to meet, the buyer selects 'Arrange with SafeMeet' straight from the conversation.",
           forMarketplace:
-            "You offer a practical alternative to trading home addresses in messages right at the handoff stage.",
+            "Your server creates the meetup through a private B2B API as part of a partner integration supported by Halfy.",
         },
         2: {
-          title: "Open a dedicated meetup flow",
+          title: "Give each role its own link",
           explanation:
-            "The user moves smoothly from open-ended messaging into a guided step linked to the item.",
+            "The marketplace receives separate buyer and seller links, then gives each one to the right participant.",
           forMarketplace:
             "The handoff stays focused on the sale without asking your users to register for a separate account.",
         },
@@ -412,35 +432,35 @@ export const DEMO_COPY = {
           explanation:
             "The buyer confirms their starting point and travel mode without exposing them to the seller.",
           forMarketplace:
-            "Buyers can arrange an in-person pickup without revealing their neighbourhood on the first exchange.",
+            "The buyer can continue without giving their starting point to the seller.",
         },
         4: {
           title: "Collect the seller's starting point",
           explanation:
-            "The seller sees only that the buyer has completed their step, then enters their own starting point.",
+            "The seller enters their own starting point and mode without a detailed indicator of the buyer's progress.",
           forMarketplace:
             "Both people contribute their starting point separately, without having to disclose private addresses to each other.",
         },
         5: {
-          title: "Suggest public places in between",
+          title: "Rank compatible public places",
           explanation:
-            "Three public spots in a shared middle area are shown without displaying either starting address.",
+            "SafeMeet ranks public places to better balance journey times without promising an exact halfway point.",
           forMarketplace:
             "Users move straight to picking a concrete public venue instead of going back and forth over neighbourhoods.",
         },
         6: {
-          title: "Confirm the venue privately",
+          title: "Propose and accept a place",
           explanation:
-            "Each participant sees the chosen venue alongside only their own starting point, then can simulate confirmation.",
+            "The buyer proposes a place and the seller accepts it. Starting points are not shown again.",
           forMarketplace:
             "Both participants get clear meetup details while keeping their own starting points private.",
         },
         7: {
-          title: "Show the agreed spot in chat",
+          title: "Read a non-geographic status",
           explanation:
-            "The selected venue appears back inside the Market Demo thread as a clear reminder for the handoff.",
+            "The marketplace can read an accepted state without receiving the place name or address.",
           forMarketplace:
-            "The sale wraps up inside your usual interface, with a public meeting spot ready for pickup day.",
+            "This view illustrates status only; it does not close the transaction or simulate an automatic notification.",
         },
       },
     },

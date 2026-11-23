@@ -1,0 +1,67 @@
+---
+layout: layouts/business.njk
+permalink: /business/index.html
+lang: en
+routeKey: business
+title: "SafeMeet Business: Integrate meetups into your service"
+description: "SafeMeet Business helps companies integrate two-person meetup organisation into their services through a private B2B API and supported partner integration."
+ogTitle: "SafeMeet Business by Halfy"
+ogDescription: "Help two people arrange a public place to meet while limiting the sharing of their starting points."
+ogImage: "/assets/safemeet-logos/web/og-image-1200x630.png"
+twitterCard: "summary_large_image"
+hero:
+  logoSrc: "/assets/safemeet-logos/svg/logo-lockup.svg"
+  logoAlt: "SafeMeet"
+  logoWidth: 140
+  logoHeight: 80
+  productLabel: "Business"
+  eyebrow: "SafeMeet Business by Halfy"
+  heading: "Help two people arrange where to meet."
+  lead: "SafeMeet Business lets companies integrate Halfy's SafeMeet module into their own services. Each participant enters their starting point separately, reviews suggested public venues and agrees on a place with the other person."
+  note: "The process limits the need to share starting points and gives both participants a defined path for arranging the meetup."
+  primaryCta: { label: "View the simulated demo", href: "/business/demo/" }
+  secondaryCta: { label: "Discuss an integration", href: "mailto:contactus.kerit@gmail.com?subject=SafeMeet%20Business%20-%20Integration%20enquiry" }
+  panelEyebrow: "Available for partner discussions"
+  panelHeading: "A private API with supported integration"
+  panelItems:
+    - "Server-to-server creation of a two-person meetup"
+    - "A separate personal link for each participant"
+    - "Functional meetup status without location details"
+howItWorks:
+  eyebrow: "How it works"
+  heading: "From your service to a place agreed in SafeMeet"
+  subheading: "Your server starts the meetup. SafeMeet then guides both participants through the steps that concern them."
+  steps:
+    - { title: "Your company creates the meetup", description: "Your authenticated server creates a two-person meetup through the private B2B API." }
+    - { title: "Each participant receives their own link", description: "Your service sends the two personal links separately, one to each participant." }
+    - { title: "Participants enter their details separately", description: "Each person provides their own starting point and travel mode inside SafeMeet. These details are not shown to the other participant or returned to the partner." }
+    - { title: "SafeMeet suggests public venues", description: "Participants review public venues proposed by SafeMeet, then propose, counter-propose and agree on a place." }
+    - { title: "Your service checks functional progress", description: "Your server can read the meetup's functional status and expiry without receiving either starting point or the agreed venue." }
+  clarification: "SafeMeet Business does not currently return the proposed or agreed venue to the partner service."
+useCases:
+  eyebrow: "Use cases"
+  heading: "For services that lead to an in-person meetup"
+  subheading: "Marketplaces are the first example, not a separate SafeMeet offer. The same integration principle can support other two-person journeys."
+  items:
+    - { title: "Marketplaces with in-person handoffs", description: "Let a buyer and seller arrange a public handoff place without exchanging their starting points in the marketplace conversation." }
+    - { title: "Peer-to-peer item hire", description: "Give an owner and renter a defined way to agree where to exchange an item." }
+    - { title: "Services requiring an initial public meetup", description: "Add a separate meetup step when two people need to meet in a public venue before the service continues." }
+integration:
+  eyebrow: "Integration"
+  heading: "A private B2B API, introduced with our team"
+  lead: "The SafeMeet Business API exists and can be used as part of a supported partner integration."
+  description: "We agree the pilot scope with each partner, provision server-side access and review how the personal links are delivered in the partner journey."
+  panelHeading: "Current integration scope"
+  items:
+    - "Private server-to-server API"
+    - "Manual partner provisioning and supported setup"
+    - "Create a meetup, receive participant links and read functional status"
+  note: "There is no public developer portal, public SDK, webhook or self-service subscription at present."
+demonstration:
+  eyebrow: "Demonstration and contact"
+  heading: "See the participant journey before discussing your service"
+  description: "The interactive demonstration uses fictional marketplace data to show how separate participant links and an agreed public venue could fit into a handoff journey."
+  note: "It is a browser-only simulation: it makes no API call and stores no data."
+  primaryCta: { label: "Open the simulated demo", href: "/business/demo/" }
+  secondaryCta: { label: "Contact us by email", href: "mailto:contactus.kerit@gmail.com?subject=SafeMeet%20Business%20-%20Business%20enquiries" }
+---

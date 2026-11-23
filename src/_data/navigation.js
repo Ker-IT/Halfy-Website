@@ -36,7 +36,7 @@ export default {
   sections: [
     {
       key: "business",
-      enabled: false,
+      enabled: true,
       external: false,
       urls: { en: "/business/", fr: "/fr/business/" },
       labels: { en: "Business", fr: "Entreprises" },
@@ -78,15 +78,15 @@ export default {
       },
     },
     business: {
-      enabled: false,
+      enabled: true,
       urls: {
-        en: "/business/contact/",
-        fr: "/fr/business/contact/",
+        en: "mailto:contactus.kerit@gmail.com?subject=SafeMeet%20Business%20-%20Business%20enquiries",
+        fr: "mailto:contactus.kerit@gmail.com?subject=SafeMeet%20Business%20-%20Contact%20professionnel",
       },
       external: false,
       labels: {
-        en: "Request a demo",
-        fr: "Demander une démo",
+        en: "Business enquiries",
+        fr: "Contact professionnel",
       },
     },
     businessDemo: {
@@ -108,12 +108,11 @@ export default {
     safemeet: "safemeet",
     privacy: "halfy",
     businessDemo: "businessDemo",
-    // Future mapping once /business/ routes are implemented:
-    // business: "business",
+    business: "business",
   },
   footer: {
     businessAnchor: {
-      urls: { en: "/#business", fr: "/fr/#business" },
+      urls: { en: "/business/", fr: "/fr/business/" },
       labels: { en: "SafeMeet Business", fr: "SafeMeet Business" },
     },
     businessContact: {

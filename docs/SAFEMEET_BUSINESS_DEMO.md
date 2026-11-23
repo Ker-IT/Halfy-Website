@@ -1,6 +1,6 @@
-# Documentation — Démonstrateur SafeMeet Business (`WEB-B2B-05.1` / `WEB-B2B-05.1.1`)
+# Documentation — Démonstrateur SafeMeet Business (`WEB-B2B-05.2`)
 
-Ce document décrit le fonctionnement, les choix d'architecture, les données fictives, les évolutions UX et les limites du démonstrateur commercial simulé accessible sur `/business/demo/` et `/fr/business/demo/`.
+Ce document décrit le fonctionnement, les choix d'architecture, les données fictives et les limites du démonstrateur commercial simulé accessible sur `/business/demo/` et `/fr/business/demo/`. Son contenu est aligné sur les capacités vérifiées dans `docs/WEB-B2B-03.1.md`.
 
 ---
 
@@ -8,7 +8,7 @@ Ce document décrit le fonctionnement, les choix d'architecture, les données fi
 
 Permettre à un prospect professionnel (fondateur de marketplace, directeur produit, product manager, responsable technique ou responsable UX) de comprendre en moins de deux minutes comment **SafeMeet by Halfy** pourrait s'insérer dans un parcours de remise en main propre entre acheteur et vendeur, sans imposer d'échange d'adresses personnelles dans la messagerie.
 
-Depuis le lot `WEB-B2B-05.1.1`, toute référence interne de gestion de projet (`WEB-B2B-*`, backlog, audits internes ou identifiants techniques factices) a été retirée de l'interface visible au profit d'un parcours orienté prospect.
+Les références internes de gestion de projet (`WEB-B2B-*`, backlog, audits internes ou identifiants techniques factices) restent absentes de l'interface visible, qui présente uniquement le parcours destiné au prospect.
 
 ---
 
@@ -21,22 +21,22 @@ Depuis le lot `WEB-B2B-05.1.1`, toute référence interne de gestion de projet (
   - Acheteur : `Lucas M.` (`LM`) — point de départ prédéfini `Uccle, Bruxelles` / `Uccle, Brussels`.
   - Vendeur : `Camille D.` (`CD`) — point de départ prédéfini `Schaerbeek, Bruxelles` / `Schaerbeek, Brussels`.
 - **Modes de déplacement illustratifs :** `Voiture` / `Car`, `À pied` / `On foot`, `Vélo` / `Bike` (accompagnés d'icônes SVG locales).
-- **Trois lieux publics fictifs :**
-  1. `Café du Centre`
-  2. `Place Centrale`
-  3. `Entrée du parc` / `Park Entrance`
+- **Trois établissements fictifs appartenant aux catégories prises en charge :**
+  1. `Café des Arcades` / `Arcades Café` (`cafe`)
+  2. `Restaurant du Passage` / `Passage Restaurant` (`restaurant`)
+  3. `Musée des Objets` / `Museum of Objects` (`museum`)
 
 ---
 
 ## 3. Les sept étapes du parcours et présentation UX
 
 1. **Conversation marketplace :** fiche du vélo enrichie (état, profil vendeur `CD`), bulles de messagerie horodatées avec avatars, et encart naturel *Vous souhaitez vous retrouver ? / Organiser avec SafeMeet*.
-2. **Invitation prête pour la rencontre :** ouverture du parcours associé à l'annonce, sans identifiant technique factice, avec précision discrète qu'aucune invitation réelle n'est envoyée.
+2. **Liens de démarrage :** représentation distincte d'un lien acheteur et d'un lien vendeur, remis séparément par la marketplace. Aucun token, fragment secret ni lien opérationnel n'est créé. Le Web et Android sont mentionnés avec la réserve sur la validation E2E B2B encore en cours.
 3. **Parcours acheteur :** en-tête indiquant le rôle actif (`Acheteur (Lucas M.)`), question orientée utilisateur (*D'où partez-vous ?*, *Comment vous déplacez-vous ?*) et note de confidentialité.
-4. **Parcours vendeur :** bascule de rôle dans le même navigateur (`Vendeur (Camille D.)`), encart positif confirmant que l'acheteur a renseigné son point de départ sans exposer son adresse, puis choix du mode de déplacement vendeur.
-5. **Proposition de lieux :** carte urbaine schématique SVG locale (îlots, parcs, cours d'eau, rues, ellipse *Zone commune* / *Shared area*) affichant exclusivement les 3 lieux publics proposés, **sans afficher `Uccle`, `Schaerbeek` ni aucun point de départ** ; badge d'en-tête corrigé (`Zone de rencontre` / `Shared area`).
-6. **Visualisation du résultat :** bascule interactive *Vue acheteur* / *Vue vendeur* montrant le lieu retenu et le badge explicite `Non communiqué` / `Not shared` pour l'autre participant, suivie d'une barre visuelle de confirmation à deux états (`En attente de confirmation (simulé)` -> `Rencontre confirmée (simulé)`). Toute modification ultérieure du lieu ou du mode de déplacement réinitialise cet état simulé afin d'éviter toute incohérence.
-7. **Retour à la marketplace :** récapitulatif inséré dans la messagerie `Market Demo` reflétant l'état exact (proposé ou confirmé simulé), synthèse commerciale en trois points, bouton de réinitialisation et CTA *Parlons de votre intégration* / *Discuss your integration* (`mailto:contactus.kerit@gmail.com`).
+4. **Parcours vendeur :** bascule de rôle dans le même navigateur (`Vendeur (Camille D.)`) et saisie séparée du point de départ et du mode. Aucun indicateur ne révèle au vendeur que l'acheteur a terminé individuellement.
+5. **Proposition de lieux :** carte urbaine schématique SVG locale affichant exclusivement les trois établissements fictifs, **sans afficher `Uccle`, `Schaerbeek` ni aucun point de départ**. Les lieux sont présentés comme classés pour mieux équilibrer les temps de trajet, sans garantie de mi-chemin exact ni d'accessibilité bilatérale. L'action est « Proposer un lieu ».
+6. **Proposition et acceptation :** l'acheteur propose le lieu sélectionné, puis le vendeur l'accepte depuis sa vue. Les points de départ, y compris celui du rôle actif, ne sont plus affichés après soumission. Une modification ultérieure du lieu ou du mode invalide l'acceptation simulée.
+7. **Retour à la marketplace :** la messagerie `Market Demo` affiche uniquement le statut non géographique « Lieu accepté dans SafeMeet » / “Place accepted in SafeMeet”. Le nom, l'adresse et la catégorie du POI n'y figurent pas. Ce retour est illustratif : aucun appel API, webhook, callback, notification automatique ou clôture de transaction n'est simulé.
 
 ### Panneau explicatif latéral simplifié
 
@@ -52,7 +52,7 @@ Le panneau de droite affiche uniquement le numéro d'étape, un titre concret, u
 - **Désactivation de GA4 sur les pages de démonstration :** `src/_includes/components/analytics.njk` n'injecte pas `G-YYH1720STZ` lorsque `disableAnalytics: true` est actif, afin d'éviter que les essais internes ou revues commerciales d'une URL `noindex` ne polluent les statistiques publiques.
 - **Correction du chevauchement du header collant :** `scroll-padding-top: 96px` sur `html`, `scroll-margin-top: 96px` sur les conteneurs de démonstration, et utilisation de `heading.focus({ preventScroll: true })` avec recalage maîtrisé dans `demo-marketplace.js` (`scrollStageIntoViewIfObscured`).
 - **Modules JS statiques :** `src/assets/scripts/business/demo-data.js`, `src/assets/scripts/business/demo-simulation.js`, `src/assets/scripts/business/demo-marketplace.js`.
-- **Tests automatisés :** `scripts/test-demo.mjs` (`node:test`) et `scripts/check.mjs` (assertions HTML, CTA, exclusion GA4, absence de références internes et protection vie privée de la carte SVG).
+- **Tests automatisés :** `scripts/test-demo.mjs` (`node:test`) et `scripts/check.mjs` vérifient notamment les deux liens de rôle, les catégories, l'absence de progression individuelle, la suppression des origines dans le résultat, la proposition suivie de l'acceptation, l'absence de POI dans le retour marketplace, `noindex` et l'exclusion de GA4.
 
 ---
 
@@ -65,22 +65,22 @@ Le panneau de droite affiche uniquement le numéro d'étape, un titre concret, u
 
 ---
 
-## 6. Hypothèses internes à vérifier (`WEB-B2B-03.1`) et évolution (`WEB-B2B-05.2`)
+## 6. Capacités vérifiées et limites conservées
 
-*(Section interne réservée à la documentation ; non exposée dans l'interface publique.)*
+L'audit `WEB-B2B-03.1` établit les limites représentées par le démonstrateur :
 
-Avant toute évolution vers **WEB-B2B-05.2**, l'audit **WEB-B2B-03.1** (Backend, WebApp et Mobile) devra vérifier :
-1. Les modes de transport réellement supportés et leur impact effectif sur les résultats.
-2. Le cycle de vie réel des liens d'invitation SafeMeet et la possibilité d'associer une référence de transaction.
-3. L'isolation serveur effective entre les données saisies par chaque participant.
-4. L'existence ou non d'un mécanisme de confirmation mutuelle.
-5. Les modalités réelles éventuelles de redirection ou de retour vers une plateforme tierce (sans promettre aujourd'hui de callback, webhook ou SDK).
+1. L'API B2B est privée et utilisée dans le cadre d'une intégration partenaire accompagnée.
+2. La création initiale fournit deux liens bootstrap distincts, un par rôle. Le démonstrateur n'en reproduit ni le format ni les secrets.
+3. Chaque participant transmet séparément son point de départ et choisit la marche, le vélo ou la voiture. Les origines ne sont pas exposées à l'autre rôle ou au partenaire.
+4. SafeMeet classe jusqu'à cinq lieux parmi les catégories `bar`, `cafe`, `restaurant`, `cinema`, `museum` et `florist`. La carte du démonstrateur reste une illustration fictive de trois résultats.
+5. Le parcours réel prend en charge proposition, contre-proposition et acceptation. Le scénario simplifié montre une proposition de l'acheteur acceptée par le vendeur.
+6. Le partenaire peut lire un statut fonctionnel non géographique. Il ne reçoit pas le lieu accepté et ne dispose d'aucun webhook, callback ou notification automatique.
+7. Le parcours est disponible sur le Web et Android ; la validation E2E de la version B2B-05.1 reste en cours.
 
 ---
 
-## 7. Conditions pour une future publication commerciale
+## 7. Articulation avec les pages commerciales
 
-1. Achèvement de **WEB-B2B-03.1** et ajustement des messages dans **WEB-B2B-05.2**.
-2. Création et validation de la page **SafeMeet Business** (`/business/` et `/fr/business/`, lot **WEB-B2B-04**).
-3. Remplacement éventuel de l'illustration vélo SVG par une photographie autorisée.
-4. Validation commerciale et éditoriale finale avant retrait éventuel de `noindex, follow`, réactivation de GA4 et intégration dans la navigation / `sitemap.xml`.
+1. Les pages **SafeMeet Business** (`/business/` et `/fr/business/`) présentent désormais l'offre d'intégration et renvoient vers ce démonstrateur dans la langue correspondante.
+2. Remplacement éventuel de l'illustration vélo SVG par une photographie autorisée.
+3. Le démonstrateur reste en `noindex, follow`, hors sitemap et sans GA4. Seules les pages commerciales sont ajoutées à la navigation publique et au sitemap.

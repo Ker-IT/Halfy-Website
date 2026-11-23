@@ -2209,6 +2209,16 @@ a {
   background: var(--white);
 }
 
+.demo-outcome-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.demo-outcome-note {
+  padding: 0 2px;
+}
+
 .demo-outcome-venue {
   padding: 16px;
   background: #eff6ff;
@@ -2623,8 +2633,8 @@ a {
   margin: 22px auto 0;
   padding: 16px 20px;
   color: var(--dark);
-  background: #eff6ff;
-  border-left: 4px solid var(--primary);
+  background: var(--light);
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-weight: 600;
 }
@@ -2641,10 +2651,6 @@ a {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-}
-
-.business-usecase-card--primary {
-  border-top: 4px solid var(--primary);
 }
 
 .business-usecase-card h3 {

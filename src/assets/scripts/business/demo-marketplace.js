@@ -478,13 +478,15 @@ function renderStepBody(copy, state, sim) {
           </button>
         </div>
 
-        <div class="demo-outcome-card">
-          <div class="demo-outcome-venue">
-            <span class="demo-field-label">${escapeHtml(ui.step6.proposedVenueLabel)}</span>
-            <strong>${escapeHtml(viewData.venue ? viewData.venue.name : "")}</strong>
-            <span>${escapeHtml(viewData.venue ? viewData.venue.categoryLabel : "")}</span>
+        <div class="demo-outcome-group">
+          <div class="demo-outcome-card">
+            <div class="demo-outcome-venue">
+              <span class="demo-field-label">${escapeHtml(ui.step6.proposedVenueLabel)}</span>
+              <strong>${escapeHtml(viewData.venue ? viewData.venue.name : "")}</strong>
+              <span>${escapeHtml(viewData.venue ? viewData.venue.categoryLabel : "")}</span>
+            </div>
           </div>
-          <p class="demo-field-note" data-origin-removed>${escapeHtml(ui.step6.originsRemovedNote)}</p>
+          <p class="demo-field-note demo-outcome-note" data-origin-removed>${escapeHtml(ui.step6.originsRemovedNote)}</p>
         </div>
 
         <div class="demo-confirm-bar ${isAccepted ? "is-confirmed" : ""}">

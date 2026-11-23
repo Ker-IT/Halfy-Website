@@ -72,7 +72,14 @@ for (const icon of manifest.icons || []) {
 
 // Sitemap must list canonical product and Business routes and exclude redirects or future routes
 const sitemap = fs.readFileSync(path.join(siteDir, "sitemap.xml"), "utf8");
-const forbiddenSitemapRoutes = ["/halfway", "/business/marketplaces", "/developers", "/pricing"];
+const forbiddenSitemapRoutes = [
+  "/halfway",
+  "/business/demo/",
+  "/fr/business/demo/",
+  "/business/marketplaces",
+  "/developers",
+  "/pricing",
+];
 for (const forbidden of forbiddenSitemapRoutes) {
   assert(!sitemap.includes(forbidden), `Sitemap must not reference route: ${forbidden}`);
 }
@@ -162,6 +169,7 @@ const htmlPages = [
   {
     file: "business/index.html",
     lang: "en",
+    disableAnalytics: true,
     expectedCanonical: "https://halfy.app/business/",
     switchTarget: "/fr/business/",
     activeProductHref: "/business/",
@@ -171,6 +179,7 @@ const htmlPages = [
   {
     file: "fr/business/index.html",
     lang: "fr",
+    disableAnalytics: true,
     expectedCanonical: "https://halfy.app/fr/business/",
     switchTarget: "/business/",
     activeProductHref: "/fr/business/",
@@ -208,9 +217,17 @@ for (const page of htmlPages) {
 
   const headEndIdx = html.indexOf("</head>");
   const bodyStartIdx = html.indexOf("<body");
-  const gtagIdx = html.indexOf("G-YYH1720STZ");
   assert(headEndIdx !== -1 && bodyStartIdx !== -1, `${page.file}: malformed head/body`);
-  assert(gtagIdx !== -1 && gtagIdx < headEndIdx, `${page.file}: GA4 script must be inside <head>`);
+  if (page.disableAnalytics) {
+    assert(!html.includes("G-YYH1720STZ"), `${page.file}: GA4 ID must be excluded`);
+    assert(!html.includes("googletagmanager.com/gtag/js"), `${page.file}: gtag.js must be excluded`);
+    assert(!html.includes("gtag('config'"), `${page.file}: gtag config call must be excluded`);
+  } else {
+    const gtagIdx = html.indexOf("G-YYH1720STZ");
+    assert(gtagIdx !== -1 && gtagIdx < headEndIdx, `${page.file}: GA4 script must be inside <head>`);
+    assert(html.includes("googletagmanager.com/gtag/js"), `${page.file}: gtag.js must remain enabled`);
+    assert(html.includes("gtag('config'"), `${page.file}: gtag config call must remain enabled`);
+  }
   const betweenHeadAndBody = html.slice(headEndIdx + 7, bodyStartIdx).trim();
   assert(betweenHeadAndBody === "", `${page.file}: unexpected content between </head> and <body>`);
 
@@ -405,6 +422,7 @@ for (const page of demoPages) {
   // GA4 must NOT run on internal simulated demo pages
   assert(!html.includes("G-YYH1720STZ"), `${page.file}: GA4 ID must be excluded from demo pages`);
   assert(!html.includes("googletagmanager.com/gtag/js"), `${page.file}: GA4 script tag must be excluded from demo pages`);
+  assert(!html.includes("gtag('config'"), `${page.file}: GA4 config call must be excluded from demo pages`);
 
   assert(
     html.includes(`<link rel="canonical" href="${page.expectedCanonical}" />`),
@@ -475,4 +493,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log("\nAll WEB-B2B-05.2 checks passed!");
+console.log("\nAll WEB-B2B-05.2, WEB-B2B-04 and WEB-B2B-04.1 checks passed!");

@@ -10,6 +10,8 @@ Le produit ne fournit pas d’API publique en libre-service, de SDK public, de w
 
 Le démonstrateur commercial explique correctement le problème métier et la séparation des points de départ. Il reste explicitement simulé, sans réseau ni stockage. Cinq de ses sept étapes nécessitent néanmoins un ajustement avant publication commerciale : représentation des deux liens, signal de progression de l’autre participant, catégories et sémantique des lieux, affichage du propre point de départ après soumission, mécanisme d’acceptation et retour du lieu dans la messagerie.
 
+> **Mise à jour après audit :** ce dernier paragraphe conserve le constat établi avant implémentation. WEB-B2B-05.2 a depuis clôturé les écarts recensés dans le démonstrateur. Les routes `/business/demo/` et `/fr/business/demo/` restent des simulations `noindex`, sans appel API, stockage, géolocalisation ni GA4.
+
 ## 2. Périmètre et niveaux de disponibilité
 
 Quatre niveaux doivent rester distincts dans les contenus publics :
@@ -256,6 +258,10 @@ Les statuts ci-dessous évaluent la fidélité au produit actuel, pas la qualit�
 7. Le lieu accepté est réinjecté dans la conversation sans mécanisme produit disponible.
 8. Deux formulations commerciales sont trop fortes : engagement supposé plus facile et transaction présentée comme conclue.
 
+### Clôture des écarts par WEB-B2B-05.2
+
+WEB-B2B-05.2 a traité les huit constats historiques ci-dessus : deux liens de rôle sont représentés, aucun signal individuel non disponible n’est promis, les lieux fictifs utilisent des catégories prises en charge, la simulation distingue proposition et acceptation, les points de départ ne sont pas réaffichés après saisie et le retour partenaire est limité à un état fonctionnel sans nom de lieu. Les formulations sur l’engagement et la conclusion de la transaction ont également été retirées. Le démonstrateur demeure explicitement fictif et ne devient pas un client de l’API B2B.
+
 ## 5. Matrice des capacités et formulations commerciales
 
 | Affirmation envisagée | Justification et source | État | Formulation publique autorisée | Réserve nécessaire |
@@ -283,10 +289,7 @@ Les statuts ci-dessous évaluent la fidélité au produit actuel, pas la qualit�
 
 ## 6. Architecture de contenu proposée pour WEB-B2B-04
 
-WEB-B2B-04 doit créer quatre pages statiques :
-
-- `/business/` et `/fr/business/` : entrée SafeMeet Business pour les décideurs produit et dirigeants ;
-- `/business/marketplaces/` et `/fr/business/marketplaces/` : cas d’usage détaillé pour les marketplaces et responsables techniques.
+Au moment de l’audit, la proposition initiale portait sur quatre pages statiques : les entrées SafeMeet Business `/business/` et `/fr/business/`, ainsi que deux pages dédiées aux marketplaces. WEB-B2B-04 a finalement livré **deux pages**, `/business/` et `/fr/business/`. Les routes `/business/marketplaces/` et `/fr/business/marketplaces/` sont reportées et ne doivent être ni générées, ni liées, ni ajoutées au sitemap ou à la navigation.
 
 La promesse principale commune est : **simplifier l’organisation d’une remise en main propre**. La confidentialité des points de départ et le parcours mieux encadré sont des bénéfices complémentaires, pas des garanties de sécurité.
 
@@ -303,7 +306,9 @@ La promesse principale commune est : **simplifier l’organisation d’une remis
 | Intégration technique | API privée serveur-à-serveur, deux liens de rôle, Web et Android, guide et exemple .NET. | “Private server-to-server API, supported through an accompanied pilot.” | Ne pas exposer les quotas, en-têtes, limites anti-abus ou détails opérationnels confidentiels sur la page marketing. |
 | CTA final | « Parlez-nous de votre parcours de remise en main propre. » | “Tell us about your in-person handoff flow.” | `mailto:` actuel ou future page de contact après décision WEB-B2B-06. |
 
-### 6.2 Page `/business/marketplaces/` et `/fr/business/marketplaces/`
+### 6.2 Pages marketplace reportées
+
+La structure ci-dessous est conservée comme proposition historique. Elle n’a pas été livrée par WEB-B2B-04 et ne décrit pas des routes actuellement disponibles.
 
 | Section | Objectif | Contenu autorisé |
 | --- | --- | --- |
@@ -317,6 +322,8 @@ La promesse principale commune est : **simplifier l’organisation d’une remis
 | Pilote | Qualifier le prospect. | « Demander un pilote » et questions sur volume, parcours de remise, canaux de remise des liens et contraintes techniques. Aucune tarification inventée. |
 
 ### 6.3 Intégration Eleventy, i18n, SEO et navigation
+
+Le plan ci-dessous est conservé comme trace de la proposition initiale. L’implémentation retenue déclare uniquement `business` pour les pages publiques et `businessDemo` pour les démonstrateurs ; elle n’ajoute pas `businessMarketplaces`.
 
 1. Ajouter `business` et `businessMarketplaces` dans `src/_data/routes.js`, avec routes EN et FR.
 2. Créer les quatre pages Nunjucks sous `src/pages/en/business/` et `src/pages/fr/business/`.
@@ -421,11 +428,14 @@ La promesse principale commune est : **simplifier l’organisation d’une remis
 - La configuration confidentielle Production n’a pas été lue. L’activation réelle de la persistance chiffrée des origines, des clés et des fournisseurs n’est pas déduite de `appsettings.json`.
 - La validation E2E B2B-05.1 sur l’environnement unique reste annoncée en cours dans les documents opérationnels.
 - Aucun test Production, test de charge, création de rencontre réelle ou inspection de données n’a été effectué.
-- Le site ne possède pas encore les pages WEB-B2B-04 ; la structure proposée n’est pas une implémentation.
+- **Constat historique au moment de l’audit :** le site ne possédait pas encore les pages WEB-B2B-04 ; la structure proposée n’était pas une implémentation.
+- **Mise à jour :** WEB-B2B-04 a depuis livré les deux pages `/business/` et `/fr/business/`. Les deux routes marketplace dédiées restent reportées.
 
 ### Validations exécutées
 
 - Démonstrateur Website : 8/8 tests réussis avec `node --test scripts/test-demo.mjs`.
+- WEB-B2B-05.2 : les écarts du démonstrateur recensés dans la section 4 ont été clôturés, avec conservation du caractère simulé et `noindex`.
+- WEB-B2B-04 : deux pages SafeMeet Business ont été livrées en anglais et en français ; aucune page marketplace dédiée n’a été publiée.
 - SafeMeet Web ciblé : 98/98 tests réussis sur les services bootstrap/stockage/API et les composants origines/candidats.
 - Mobile : 36/36 tests réussis avec `npm test`, dont App Links, échange bootstrap, absence de logs de secrets et polling B2B-05.1.
 - Relecture croisée des DTO, contrôleurs, services, clients et documents listés ci-dessus.

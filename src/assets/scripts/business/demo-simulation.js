@@ -22,12 +22,12 @@ export function createDemoSimulation(initialLang = "en") {
       step: 1,
       maxStepReached: 1,
       activeRole: "buyer",
-      invitationCreated: false,
+      roleLinksCreated: false,
       buyerTransport: null,
       sellerTransport: null,
       selectedVenueId: null,
       resultViewRole: "buyer",
-      meetupConfirmedSimulated: false,
+      proposalAcceptedSimulated: false,
       errorKey: null,
     };
   }
@@ -45,7 +45,7 @@ export function createDemoSimulation(initialLang = "en") {
   }
 
   function validatePrerequisitesForStep(targetStep) {
-    if (targetStep >= 3 && !state.invitationCreated) {
+    if (targetStep >= 3 && !state.roleLinksCreated) {
       return "missingInvitation";
     }
     if (targetStep >= 4 && !state.buyerTransport) {
@@ -56,6 +56,9 @@ export function createDemoSimulation(initialLang = "en") {
     }
     if (targetStep >= 6 && !state.selectedVenueId) {
       return "missingVenue";
+    }
+    if (targetStep >= 7 && !state.proposalAcceptedSimulated) {
+      return "missingAcceptance";
     }
     return null;
   }
@@ -69,18 +72,18 @@ export function createDemoSimulation(initialLang = "en") {
       return copy;
     },
 
-    startInvitation() {
+    createRoleLinks() {
       if (state.step !== 1) {
         return fail("invalidStep");
       }
-      state.invitationCreated = true;
+      state.roleLinksCreated = true;
       state.step = 2;
       state.maxStepReached = Math.max(state.maxStepReached, 2);
       return succeed();
     },
 
     continueAsBuyer() {
-      if (state.step !== 2 || !state.invitationCreated) {
+      if (state.step !== 2 || !state.roleLinksCreated) {
         return fail("missingInvitation");
       }
       state.activeRole = "buyer";
@@ -93,11 +96,11 @@ export function createDemoSimulation(initialLang = "en") {
       if (!DEMO_TRANSPORTS.includes(mode)) {
         return fail("missingBuyerTransport");
       }
-      if (state.step < 3 || !state.invitationCreated) {
+      if (state.step < 3 || !state.roleLinksCreated) {
         return fail("invalidStep");
       }
       if (state.buyerTransport !== mode) {
-        state.meetupConfirmedSimulated = false;
+        state.proposalAcceptedSimulated = false;
       }
       state.buyerTransport = mode;
       return succeed();
@@ -124,7 +127,7 @@ export function createDemoSimulation(initialLang = "en") {
         return fail("invalidStep");
       }
       if (state.sellerTransport !== mode) {
-        state.meetupConfirmedSimulated = false;
+        state.proposalAcceptedSimulated = false;
       }
       state.sellerTransport = mode;
       return succeed();
@@ -150,7 +153,7 @@ export function createDemoSimulation(initialLang = "en") {
         return fail("invalidStep");
       }
       if (state.selectedVenueId !== venueId) {
-        state.meetupConfirmedSimulated = false;
+        state.proposalAcceptedSimulated = false;
         state.maxStepReached = Math.min(state.maxStepReached, 5);
       }
       state.selectedVenueId = venueId;
@@ -180,11 +183,15 @@ export function createDemoSimulation(initialLang = "en") {
       return succeed();
     },
 
-    confirmMeetupSimulated() {
-      if (state.step !== 6 || !state.selectedVenueId) {
+    acceptProposalSimulated() {
+      if (
+        state.step !== 6 ||
+        state.resultViewRole !== "seller" ||
+        !state.selectedVenueId
+      ) {
         return fail("invalidStep");
       }
-      state.meetupConfirmedSimulated = true;
+      state.proposalAcceptedSimulated = true;
       return succeed();
     },
 
@@ -194,6 +201,9 @@ export function createDemoSimulation(initialLang = "en") {
       }
       if (!state.selectedVenueId) {
         return fail("missingVenue");
+      }
+      if (!state.proposalAcceptedSimulated) {
+        return fail("missingAcceptance");
       }
       state.step = 7;
       state.maxStepReached = 7;
@@ -252,26 +262,18 @@ export function createDemoSimulation(initialLang = "en") {
         return {
           role: "buyer",
           ownName: copy.marketplace.buyerName,
-          ownOrigin: copy.marketplace.buyerLocation,
-          ownTransport: state.buyerTransport
-            ? copy.marketplace.transports[state.buyerTransport].label
-            : null,
-          otherOriginVisible: false,
-          otherOrigin: null,
           venue: venueObj,
+          proposedByRole: "buyer",
+          acceptedByRole: state.proposalAcceptedSimulated ? "seller" : null,
         };
       }
 
       return {
         role: "seller",
         ownName: copy.marketplace.sellerName,
-        ownOrigin: copy.marketplace.sellerLocation,
-        ownTransport: state.sellerTransport
-          ? copy.marketplace.transports[state.sellerTransport].label
-          : null,
-        otherOriginVisible: false,
-        otherOrigin: null,
         venue: venueObj,
+        proposedByRole: "buyer",
+        acceptedByRole: state.proposalAcceptedSimulated ? "seller" : null,
       };
     },
   };

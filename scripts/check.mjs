@@ -350,7 +350,7 @@ const demoPages = [
     expectedCtaLabel: "Business enquiries",
     expectedCtaHrefPrefix: "mailto:contactus.kerit@gmail.com",
     expectedDisclaimer:
-      "Interactive demo using fictional data. It shows an example of how SafeMeet could be integrated into a marketplace. Technical details remain to be confirmed.",
+      "Interactive demo using fictional data, with no API call. The B2B API remains private and Halfy supports each partner integration.",
   },
   {
     file: "fr/business/demo/index.html",
@@ -360,7 +360,7 @@ const demoPages = [
     expectedCtaLabel: "Contact professionnel",
     expectedCtaHrefPrefix: "mailto:contactus.kerit@gmail.com",
     expectedDisclaimer:
-      "Démonstration interactive utilisant des données fictives. Elle présente un exemple d'intégration de SafeMeet dans une marketplace. Les modalités techniques restent à confirmer.",
+      "Démonstration interactive utilisant des données fictives, sans appel API. L'API B2B reste privée et l'intégration partenaire est accompagnée.",
   },
 ];
 
@@ -446,4 +446,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log("\nAll WEB-B2B-05.1.1 checks passed!");
+console.log("\nAll WEB-B2B-05.2 checks passed!");

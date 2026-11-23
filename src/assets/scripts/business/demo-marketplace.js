@@ -335,7 +335,18 @@ function renderStepBody(copy, state, sim) {
         <h2 class="demo-stage-heading" tabindex="-1">${escapeHtml(ui.step2.heading)}</h2>
         <div class="demo-info-box">
           <p><strong>${escapeHtml(ui.step2.listingLine)}</strong></p>
-          <p class="demo-notice-text">${escapeHtml(ui.step2.note)}</p>
+          <dl class="demo-outcome-details">
+            <div data-role-start-link="buyer">
+              <dt>${escapeHtml(ui.step2.buyerLinkLabel)}</dt>
+              <dd>${escapeHtml(ui.step2.simulatedLinkText)}</dd>
+            </div>
+            <div data-role-start-link="seller">
+              <dt>${escapeHtml(ui.step2.sellerLinkLabel)}</dt>
+              <dd>${escapeHtml(ui.step2.simulatedLinkText)}</dd>
+            </div>
+          </dl>
+          <p class="demo-notice-text">${escapeHtml(ui.step2.deliveryNote)}</p>
+          <p class="demo-field-note">${escapeHtml(ui.step2.platformNote)}</p>
         </div>
         <div class="demo-action-row demo-action-row--split">
           <button type="button" class="btn-secondary demo-btn" data-action="back">${escapeHtml(ui.backButton)}</button>
@@ -371,8 +382,8 @@ function renderStepBody(copy, state, sim) {
     return `
       <div class="demo-stage-block">
         <div class="demo-status-box demo-status-box--success">
-          <p><strong>${escapeHtml(ui.step4.buyerDoneTitle)}</strong></p>
-          <p class="demo-field-note">${escapeHtml(ui.step4.buyerDoneNote)}</p>
+          <p><strong>${escapeHtml(ui.step4.separateFlowTitle)}</strong></p>
+          <p class="demo-field-note">${escapeHtml(ui.step4.separateFlowNote)}</p>
         </div>
         <h2 class="demo-stage-heading" tabindex="-1">${escapeHtml(ui.step4.heading)}</h2>
         <div class="demo-field-card">
@@ -406,7 +417,7 @@ function renderStepBody(copy, state, sim) {
           <span class="demo-venue-num">${index + 1}</span>
           <span class="demo-venue-text">
             <strong>${escapeHtml(venueCopy.name)}</strong>
-            <small>${escapeHtml(venueCopy.area)} · ${escapeHtml(venueCopy.summary)}</small>
+            <small>${escapeHtml(venueCopy.categoryLabel)} · ${escapeHtml(venueCopy.summary)}</small>
           </span>
         </button>
       `;
@@ -430,7 +441,20 @@ function renderStepBody(copy, state, sim) {
   if (state.step === 6) {
     const viewRole = state.resultViewRole;
     const viewData = sim.getParticipantViewData(viewRole);
-    const isConfirmed = state.meetupConfirmedSimulated;
+    const isAccepted = state.proposalAcceptedSimulated;
+    const proposalStatus = isAccepted
+      ? ui.step6.proposalAccepted
+      : viewRole === "seller"
+        ? ui.step6.proposalReceived
+        : ui.step6.proposalSent;
+    const responseAction = viewRole === "seller"
+      ? "accept-proposal-simulated"
+      : "show-seller-proposal";
+    const responseLabel = isAccepted
+      ? ui.step6.acceptedBtn
+      : viewRole === "seller"
+        ? ui.step6.acceptBtn
+        : ui.step6.switchToSellerBtn;
 
     return `
       <div class="demo-stage-block">
@@ -456,36 +480,27 @@ function renderStepBody(copy, state, sim) {
 
         <div class="demo-outcome-card">
           <div class="demo-outcome-venue">
-            <span class="demo-field-label">${escapeHtml(ui.step6.selectedVenueLabel)}</span>
+            <span class="demo-field-label">${escapeHtml(ui.step6.proposedVenueLabel)}</span>
             <strong>${escapeHtml(viewData.venue ? viewData.venue.name : "")}</strong>
-            <span>${escapeHtml(viewData.venue ? viewData.venue.area : "")}</span>
+            <span>${escapeHtml(viewData.venue ? viewData.venue.categoryLabel : "")}</span>
           </div>
-          <dl class="demo-outcome-details">
-            <div>
-              <dt>${escapeHtml(ui.step6.ownOriginLabel)}</dt>
-              <dd>${escapeHtml(viewData.ownOrigin)} (${escapeHtml(viewData.ownTransport || "")})</dd>
-            </div>
-            <div>
-              <dt>${escapeHtml(ui.step6.otherOriginLabel)}</dt>
-              <dd><span class="demo-private-pill">${escapeHtml(ui.step6.otherOriginHidden)}</span></dd>
-            </div>
-          </dl>
+          <p class="demo-field-note" data-origin-removed>${escapeHtml(ui.step6.originsRemovedNote)}</p>
         </div>
 
-        <div class="demo-confirm-bar ${isConfirmed ? "is-confirmed" : ""}">
+        <div class="demo-confirm-bar ${isAccepted ? "is-confirmed" : ""}">
           <div class="demo-confirm-status">
-            <span class="demo-field-label">${escapeHtml(ui.step6.confirmHeading)}</span>
-            <span class="demo-confirm-pill ${isConfirmed ? "is-confirmed" : ""}">
-              ${escapeHtml(isConfirmed ? ui.step6.confirmDone : ui.step6.confirmPending)}
+            <span class="demo-field-label">${escapeHtml(ui.step6.negotiationHeading)}</span>
+            <span class="demo-confirm-pill ${isAccepted ? "is-confirmed" : ""}">
+              ${escapeHtml(proposalStatus)}
             </span>
           </div>
           <button
             type="button"
             class="demo-inline-action"
-            data-action="confirm-simulated"
-            ${isConfirmed ? "disabled" : ""}
+            data-action="${responseAction}"
+            ${isAccepted ? "disabled" : ""}
           >
-            ${escapeHtml(isConfirmed ? ui.step6.confirmedBtn : ui.step6.confirmBtn)}
+            ${escapeHtml(responseLabel)}
           </button>
         </div>
 
@@ -498,10 +513,6 @@ function renderStepBody(copy, state, sim) {
   }
 
   // Step 7: Return to marketplace + synthesis + restart + commercial contact
-  const selectedVenue = mp.venues[state.selectedVenueId];
-  const statusText = state.meetupConfirmedSimulated
-    ? ui.step7.summaryStatusConfirmed
-    : ui.step7.summaryStatusPending;
   const takeawaysHtml = ui.step7.takeaways
     .map((item) => `<li>${escapeHtml(item)}</li>`)
     .join("");
@@ -515,10 +526,9 @@ function renderStepBody(copy, state, sim) {
         <div class="demo-chat-summary-card">
           <div class="demo-chat-summary-top">
             <img src="/assets/safemeet-logos/svg/logo-symbol.svg" alt="SafeMeet" width="32" height="22" class="demo-safemeet-icon-sm" />
-            <span class="demo-confirm-pill ${state.meetupConfirmedSimulated ? "is-confirmed" : ""}">${escapeHtml(statusText)}</span>
+            <span class="demo-confirm-pill is-confirmed">${escapeHtml(ui.step7.summaryStatusAccepted)}</span>
           </div>
           <p class="demo-chat-summary-title">${escapeHtml(ui.step7.summaryHeading)}</p>
-          <p class="demo-chat-summary-venue">${escapeHtml(selectedVenue ? selectedVenue.name : "")} · ${escapeHtml(selectedVenue ? selectedVenue.area : "")}</p>
           <p class="demo-field-note">${escapeHtml(ui.step7.summaryNote)}</p>
         </div>
       </div>
@@ -649,7 +659,7 @@ function mountDemo() {
       let res = null;
       let moveStep = false;
       if (action === "start-invitation") {
-        res = sim.startInvitation();
+        res = sim.createRoleLinks();
         moveStep = true;
       } else if (action === "continue-buyer") {
         res = sim.continueAsBuyer();
@@ -663,8 +673,10 @@ function mountDemo() {
       } else if (action === "advance-result") {
         res = sim.advanceToResult();
         moveStep = true;
-      } else if (action === "confirm-simulated") {
-        res = sim.confirmMeetupSimulated();
+      } else if (action === "show-seller-proposal") {
+        res = sim.setResultViewRole("seller");
+      } else if (action === "accept-proposal-simulated") {
+        res = sim.acceptProposalSimulated();
       } else if (action === "advance-return") {
         res = sim.advanceToMarketplaceReturn();
         moveStep = true;

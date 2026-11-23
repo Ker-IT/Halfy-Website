@@ -79,8 +79,8 @@ L'audit `WEB-B2B-03.1` établit les limites représentées par le démonstrateur
 
 ---
 
-## 7. Conditions pour une future publication commerciale
+## 7. Articulation avec les pages commerciales
 
-1. Création et validation de la page **SafeMeet Business** (`/business/` et `/fr/business/`, lot **WEB-B2B-04**, hors du présent lot).
+1. Les pages **SafeMeet Business** (`/business/` et `/fr/business/`) présentent désormais l'offre d'intégration et renvoient vers ce démonstrateur dans la langue correspondante.
 2. Remplacement éventuel de l'illustration vélo SVG par une photographie autorisée.
-3. Validation commerciale et éditoriale finale avant tout retrait éventuel de `noindex, follow`, réactivation de GA4 ou ajout à la navigation et au `sitemap.xml`.
+3. Le démonstrateur reste en `noindex, follow`, hors sitemap et sans GA4. Seules les pages commerciales sont ajoutées à la navigation publique et au sitemap.

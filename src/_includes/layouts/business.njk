@@ -1,0 +1,94 @@
+---
+layout: layouts/base.njk
+bodyClass: page-business
+---
+<section class="business-hero">
+  <div class="business-page-container business-hero-grid">
+    <div class="business-hero-copy">
+      <div class="business-page-brand">
+        <img src="{{ hero.logoSrc }}" alt="{{ hero.logoAlt }}" width="{{ hero.logoWidth }}" height="{{ hero.logoHeight }}" />
+        <span>{{ hero.productLabel }}</span>
+      </div>
+      <p class="section-eyebrow">{{ hero.eyebrow }}</p>
+      <h1>{{ hero.heading }}</h1>
+      <p class="business-hero-lead">{{ hero.lead }}</p>
+      <p class="business-hero-note">{{ hero.note }}</p>
+      <div class="cta-group">
+        <a href="{{ hero.primaryCta.href }}" class="btn-web">{{ hero.primaryCta.label }}</a>
+        <a href="{{ hero.secondaryCta.href }}" class="btn-secondary">{{ hero.secondaryCta.label }}</a>
+      </div>
+    </div>
+    <aside class="business-hero-panel" aria-labelledby="business-hero-panel-title">
+      <p class="business-panel-kicker">{{ hero.panelEyebrow }}</p>
+      <h2 id="business-hero-panel-title">{{ hero.panelHeading }}</h2>
+      <ul class="business-page-list">
+        {% for item in hero.panelItems %}<li>{{ item }}</li>{% endfor %}
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<section id="how-it-works" class="business-page-section">
+  <div class="business-page-container">
+    <div class="section-heading">
+      <p class="section-eyebrow">{{ howItWorks.eyebrow }}</p>
+      <h2>{{ howItWorks.heading }}</h2>
+      <p>{{ howItWorks.subheading }}</p>
+    </div>
+    <ol class="business-flow-list">
+      {% for step in howItWorks.steps %}
+      <li class="business-flow-card">
+        <span class="business-flow-number" aria-hidden="true">{{ loop.index }}</span>
+        <div><h3>{{ step.title }}</h3><p>{{ step.description }}</p></div>
+      </li>
+      {% endfor %}
+    </ol>
+    <p class="business-clarification">{{ howItWorks.clarification }}</p>
+  </div>
+</section>
+
+<section class="business-page-section section-surface-muted">
+  <div class="business-page-container">
+    <div class="section-heading">
+      <p class="section-eyebrow">{{ useCases.eyebrow }}</p>
+      <h2>{{ useCases.heading }}</h2>
+      <p>{{ useCases.subheading }}</p>
+    </div>
+    <div class="business-usecase-grid">
+      {% for item in useCases.items %}
+      <article class="business-usecase-card{% if loop.first %} business-usecase-card--primary{% endif %}"><h3>{{ item.title }}</h3><p>{{ item.description }}</p></article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section id="integration" class="business-page-section">
+  <div class="business-page-container business-integration-grid">
+    <div>
+      <p class="section-eyebrow">{{ integration.eyebrow }}</p>
+      <h2>{{ integration.heading }}</h2>
+      <p class="business-section-lead">{{ integration.lead }}</p>
+      <p>{{ integration.description }}</p>
+    </div>
+    <div class="business-capability-panel">
+      <h3>{{ integration.panelHeading }}</h3>
+      <ul class="business-page-list">{% for item in integration.items %}<li>{{ item }}</li>{% endfor %}</ul>
+      <p class="business-capability-note">{{ integration.note }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="business-page-section business-demo-cta" aria-labelledby="business-demo-heading">
+  <div class="business-page-container business-demo-box">
+    <div>
+      <p class="section-eyebrow">{{ demonstration.eyebrow }}</p>
+      <h2 id="business-demo-heading">{{ demonstration.heading }}</h2>
+      <p>{{ demonstration.description }}</p>
+      <p class="business-demo-note">{{ demonstration.note }}</p>
+    </div>
+    <div class="business-demo-actions">
+      <a href="{{ demonstration.primaryCta.href }}" class="btn-web">{{ demonstration.primaryCta.label }}</a>
+      <a href="{{ demonstration.secondaryCta.href }}" class="btn-secondary">{{ demonstration.secondaryCta.label }}</a>
+    </div>
+  </div>
+</section>

@@ -29,6 +29,8 @@ const requiredFiles = [
   "fr/halfy/index.html",
   "fr/halfway/index.html",
   "fr/safemeet/index.html",
+  "business/index.html",
+  "fr/business/index.html",
   "fr/privacy.html",
   "CNAME",
   "robots.txt",
@@ -68,9 +70,9 @@ for (const icon of manifest.icons || []) {
   assert(fs.existsSync(diskPath), `Manifest icon file missing in _site: ${icon.src}`);
 }
 
-// Sitemap must list canonical Halfy/SafeMeet routes and exclude redirects or future B2B routes
+// Sitemap must list canonical product and Business routes and exclude redirects or future routes
 const sitemap = fs.readFileSync(path.join(siteDir, "sitemap.xml"), "utf8");
-const forbiddenSitemapRoutes = ["/halfway", "/business", "/developers", "/pricing"];
+const forbiddenSitemapRoutes = ["/halfway", "/business/marketplaces", "/developers", "/pricing"];
 for (const forbidden of forbiddenSitemapRoutes) {
   assert(!sitemap.includes(forbidden), `Sitemap must not reference route: ${forbidden}`);
 }
@@ -78,6 +80,8 @@ assert(sitemap.includes("https://halfy.app/halfy/"), "Sitemap missing /halfy/");
 assert(sitemap.includes("https://halfy.app/fr/halfy/"), "Sitemap missing /fr/halfy/");
 assert(sitemap.includes("https://halfy.app/safemeet/"), "Sitemap missing /safemeet/");
 assert(sitemap.includes("https://halfy.app/fr/safemeet/"), "Sitemap missing /fr/safemeet/");
+assert(sitemap.includes("https://halfy.app/business/"), "Sitemap missing /business/");
+assert(sitemap.includes("https://halfy.app/fr/business/"), "Sitemap missing /fr/business/");
 
 const redirectPages = [
   { file: "halfway/index.html", lang: "en", target: "/halfy/", expectedCanonical: "https://halfy.app/halfy/" },
@@ -156,6 +160,24 @@ const htmlPages = [
     expectedCtaHref: "https://app.halfy.app/meet",
   },
   {
+    file: "business/index.html",
+    lang: "en",
+    expectedCanonical: "https://halfy.app/business/",
+    switchTarget: "/fr/business/",
+    activeProductHref: "/business/",
+    expectedCtaLabel: "Business enquiries",
+    expectedCtaHref: "mailto:contactus.kerit@gmail.com?subject=SafeMeet%20Business%20-%20Business%20enquiries",
+  },
+  {
+    file: "fr/business/index.html",
+    lang: "fr",
+    expectedCanonical: "https://halfy.app/fr/business/",
+    switchTarget: "/business/",
+    activeProductHref: "/fr/business/",
+    expectedCtaLabel: "Contact professionnel",
+    expectedCtaHref: "mailto:contactus.kerit@gmail.com?subject=SafeMeet%20Business%20-%20Contact%20professionnel",
+  },
+  {
     file: "privacy.html",
     lang: "en",
     expectedCanonical: "https://halfy.app/privacy.html",
@@ -175,7 +197,7 @@ const htmlPages = [
   },
 ];
 
-const forbiddenFutureRoutes = ["/halfway", "/business", "/developers", "/pricing"];
+const forbiddenFutureRoutes = ["/halfway", "/business/marketplaces", "/business/contact", "/business/pricing", "/developers", "/pricing"];
 
 console.log("3. Validating HTML pages, links, brand naming, assets, SEO, navigation, and analytics...");
 for (const page of htmlPages) {
@@ -340,6 +362,15 @@ for (const pageFile of ["safemeet/index.html", "fr/safemeet/index.html"]) {
   assert(!html.includes("screen_1.png") && !html.includes("screen_2.png"), `${pageFile}: must not reuse Halfy screenshots`);
 }
 
+for (const pageFile of ["business/index.html", "fr/business/index.html"]) {
+  const html = fs.readFileSync(path.join(siteDir, pageFile), "utf8");
+  assert(html.includes("/assets/safemeet-logos/svg/logo-lockup.svg"), `${pageFile}: missing SafeMeet lockup SVG`);
+  assert(html.includes("/business/demo/") || html.includes("/fr/business/demo/"), `${pageFile}: missing localised demo link`);
+  assert(html.includes("mailto:contactus.kerit@gmail.com"), `${pageFile}: missing professional email contact`);
+  assert(!html.includes("/business/marketplaces/"), `${pageFile}: deferred marketplace route must not be linked`);
+  assert(!/receives? the agreed venue|reçoit le lieu accepté/i.test(html), `${pageFile}: must not claim the partner receives the agreed venue`);
+}
+
 console.log("3b. Validating SafeMeet Business simulated demo pages (/business/demo/)...");
 const demoPages = [
   {
@@ -403,10 +434,8 @@ for (const page of demoPages) {
 
   const headerMatch = html.match(/<header class="site-header">[\s\S]*?<\/header>/);
   const headerHtml = headerMatch ? headerMatch[0] : "";
-  assert(
-    !headerHtml.includes('href="/business/"') && !headerHtml.includes('href="/fr/business/"'),
-    `${page.file}: Business nav link must stay disabled in header`
-  );
+  const expectedBusinessUrl = page.lang === "fr" ? "/fr/business/" : "/business/";
+  assert(headerHtml.includes(`href="${expectedBusinessUrl}"`), `${page.file}: Business nav link must be enabled`);
   assert(
     !/Request a demo|Demander une démo/i.test(headerHtml),
     `${page.file}: unavailable Business header CTA must not appear`

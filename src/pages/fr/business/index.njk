@@ -1,0 +1,67 @@
+---
+layout: layouts/business.njk
+permalink: /fr/business/index.html
+lang: fr
+routeKey: business
+title: "SafeMeet Business : Intégrez les rencontres à votre service"
+description: "SafeMeet Business permet aux entreprises d'intégrer l'organisation de rencontres à deux dans leurs services grâce à une API B2B privée et une intégration accompagnée."
+ogTitle: "SafeMeet Business by Halfy"
+ogDescription: "Aidez deux personnes à organiser une rencontre dans un lieu public tout en limitant la communication de leurs points de départ."
+ogImage: "/assets/safemeet-logos/web/og-image-1200x630.png"
+twitterCard: "summary_large_image"
+hero:
+  logoSrc: "/assets/safemeet-logos/svg/logo-lockup.svg"
+  logoAlt: "SafeMeet"
+  logoWidth: 140
+  logoHeight: 80
+  productLabel: "Business"
+  eyebrow: "SafeMeet Business by Halfy"
+  heading: "Aidez deux personnes à organiser leur rencontre."
+  lead: "SafeMeet Business permet aux entreprises d'intégrer le module SafeMeet de Halfy dans leurs propres services. Chaque participant renseigne son point de départ séparément, consulte des lieux publics proposés et se met d'accord avec l'autre personne."
+  note: "Le parcours limite la communication des points de départ et encadre les étapes nécessaires à l'organisation de la rencontre."
+  primaryCta: { label: "Voir la démo simulée", href: "/fr/business/demo/" }
+  secondaryCta: { label: "Parler d'une intégration", href: "mailto:contactus.kerit@gmail.com?subject=SafeMeet%20Business%20-%20Projet%20d%27integration" }
+  panelEyebrow: "Disponible pour les échanges partenaires"
+  panelHeading: "Une API privée avec intégration accompagnée"
+  panelItems:
+    - "Création d'une rencontre à deux depuis votre serveur"
+    - "Un lien personnel distinct pour chaque participant"
+    - "État fonctionnel de la rencontre sans donnée géographique"
+howItWorks:
+  eyebrow: "Fonctionnement"
+  heading: "De votre service au lieu convenu dans SafeMeet"
+  subheading: "Votre serveur lance la rencontre. SafeMeet guide ensuite les deux participants dans les étapes qui les concernent."
+  steps:
+    - { title: "Votre entreprise crée la rencontre", description: "Votre serveur authentifié crée une rencontre à deux au moyen de l'API B2B privée." }
+    - { title: "Chaque participant reçoit son propre lien", description: "Votre service transmet séparément les deux liens personnels, un à chaque participant." }
+    - { title: "Les participants renseignent leurs données séparément", description: "Chaque personne indique son point de départ et son mode de transport dans SafeMeet. Ces informations ne sont ni affichées à l'autre participant ni renvoyées au partenaire." }
+    - { title: "SafeMeet propose des lieux publics", description: "Les participants consultent les lieux publics proposés par SafeMeet, puis peuvent proposer un lieu, faire une contre-proposition et se mettre d'accord." }
+    - { title: "Votre service consulte l'avancement fonctionnel", description: "Votre serveur peut lire l'état fonctionnel et l'expiration de la rencontre sans recevoir les points de départ ni le lieu accepté." }
+  clarification: "SafeMeet Business ne renvoie actuellement pas le lieu proposé ou accepté au service partenaire."
+useCases:
+  eyebrow: "Cas d'utilisation"
+  heading: "Pour les services qui mènent à une rencontre en personne"
+  subheading: "Les marketplaces sont le premier exemple, pas une offre SafeMeet distincte. Le même principe d'intégration peut servir d'autres parcours à deux."
+  items:
+    - { title: "Marketplaces avec remise en main propre", description: "Permettez à un acheteur et à un vendeur d'organiser une remise dans un lieu public sans échanger leurs points de départ dans la messagerie." }
+    - { title: "Location d'objets entre particuliers", description: "Proposez au propriétaire et au locataire un parcours défini pour choisir où échanger un objet." }
+    - { title: "Services nécessitant une première rencontre publique", description: "Ajoutez une étape de rencontre séparée lorsque deux personnes doivent se retrouver dans un lieu public avant la suite du service." }
+integration:
+  eyebrow: "Intégration"
+  heading: "Une API B2B privée, mise en place avec notre équipe"
+  lead: "L'API SafeMeet Business existe et peut être utilisée dans le cadre d'une intégration partenaire accompagnée."
+  description: "Nous définissons le périmètre du pilote avec chaque partenaire, configurons l'accès côté serveur et examinons la remise des liens personnels dans le parcours partenaire."
+  panelHeading: "Périmètre d'intégration actuel"
+  items:
+    - "API privée de serveur à serveur"
+    - "Accès partenaire configuré manuellement et mise en place accompagnée"
+    - "Création d'une rencontre, réception des liens participants et lecture de l'état fonctionnel"
+  note: "Il n'existe actuellement ni portail développeur public, ni SDK public, ni webhook, ni souscription autonome."
+demonstration:
+  eyebrow: "Démonstration et contact"
+  heading: "Découvrez le parcours avant d'échanger sur votre service"
+  description: "La démonstration interactive utilise les données fictives d'une marketplace pour montrer comment les liens séparés et le choix d'un lieu public peuvent s'intégrer à une remise en main propre."
+  note: "Il s'agit d'une simulation dans le navigateur : elle n'effectue aucun appel API et ne stocke aucune donnée."
+  primaryCta: { label: "Ouvrir la démo simulée", href: "/fr/business/demo/" }
+  secondaryCta: { label: "Nous contacter par email", href: "mailto:contactus.kerit@gmail.com?subject=SafeMeet%20Business%20-%20Contact%20professionnel" }
+---

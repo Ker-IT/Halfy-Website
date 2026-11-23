@@ -81,9 +81,16 @@ description: "..."
 Dans `src/_data/navigation.js`, passer `enabled: true` uniquement lorsque les deux versions (EN et FR) sont prêtes. Le sélecteur de langue, les balises `canonical`, `hreflang` (`en`, `fr`, `x-default`) et `sitemap.xml` sont alors générés automatiquement.
 
 ### Navigation directe du header et CTA contextuels (`WEB-B2B-03.3`)
-- **Desktop :** `src/_includes/components/header.njk` affiche directement les entrées `navigation.products` actives (`Halfy` et `SafeMeet`) avec leurs icônes officielles, un séparateur vertical conditionnel (`.nav-separator`) avant `navigation.sections` (`Business`, désactivé tant que `/business/` n'existe pas), l'état actif `aria-current="page"` sur la route correspondante, le sélecteur de langue et le CTA principal.
+- **Desktop :** `src/_includes/components/header.njk` affiche directement les entrées `navigation.products` actives (`Halfy` et `SafeMeet`) avec leurs icônes officielles, un séparateur vertical conditionnel (`.nav-separator`) avant `navigation.sections` (`Business`, actif vers `/business/` et `/fr/business/`), l'état actif `aria-current="page"` sur la route correspondante, le sélecteur de langue et le CTA principal.
 - **Mobile (`<= 980 px`) :** le tiroir `#mobile-navigation-drawer` reprend la même source de vérité `navigation.products` / `navigation.sections` sans regroupement imbriqué inutile, avec descriptions courtes et CTA contextuel.
-- **CTA contextuels centralisés :** `navigation.js` définit `headerCtaDefault`, `headerCtas` (`halfy`, `safemeet`, ainsi que `business` désactivé par défaut) et `headerCtaByRouteKey` (`home`/`halfy`/`privacy` -> `Open Halfy` / `Ouvrir Halfy` vers `https://app.halfy.app/` ; `safemeet` -> `Create a meetup` / `Créer une rencontre` vers `https://app.halfy.app/meet`). `header.njk` résout ce CTA en un point unique pour le desktop et le mobile.
+- **CTA contextuels centralisés :** `navigation.js` définit `headerCtaDefault`, `headerCtas` (`halfy`, `safemeet`, `business` et `businessDemo`) et `headerCtaByRouteKey`. Les pages Business et le démonstrateur proposent un contact professionnel par email en attendant `WEB-B2B-06`. `header.njk` résout ce CTA en un point unique pour le desktop et le mobile.
+
+### Architecture produit SafeMeet Business (`WEB-B2B-04`)
+
+- Halfy est l'application principale ; SafeMeet est l'un de ses modules et reste accessible directement aux particuliers.
+- SafeMeet Business permet aux entreprises d'intégrer SafeMeet dans leurs propres services au moyen de l'API B2B privée et d'une intégration accompagnée.
+- Les marketplaces sont le premier cas d'utilisation présenté. Elles ne constituent ni une marque ni une offre distincte.
+- Seules les routes `/business/` et `/fr/business/` sont publiques et indexables. Les routes marketplace envisagées restent reportées.
 
 ### Étape 5 — Vérifier
 Exécuter `npm run check` et contrôler le rendu dans `_site/` aux résolutions 375 px, 768 px et 1440 px.
